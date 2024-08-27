@@ -1,0 +1,36 @@
+.container {
+    width: 50px;
+    max-width: 90vw;
+    margin: auto;
+    text-align: center;
+    position: absolute;
+    top:-2%;
+    left: 9%;
+    
+}
+
+svg{
+    width: 30px;
+}
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+header .Icon-cart span {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 40%;
+    right: -0.6%;
+    
+}
