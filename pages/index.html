@@ -98,15 +98,26 @@
 </div>
 
 <div class="m-auto text-center">
-
-    
-
-
-
-         
-      
-
-
-</body> 
-
+  <h3>Välkommen!</h3>
+  <p>
+      Välkommen till kastmyrens diskare! Din plats för att njuta och ha kul med familjen.
+      <br>
+      vi erbjuder en diskgolfbana som aldrig förr, med x-antal hål att klara av och tävla mot varandra.
+      <br>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque ratione doloremque necessitatibus possimus. Sint laboriosam fugit, commodi consequatur facilis, soluta nostrum rem explicabo distinctio at ipsa cum, voluptates nihil optio!
+  </p>
+</div>
+</body>
+  
+<script>
+var map = L.map('map').setView([60.67206949702055, 17.110107547842237], 13);
+var marker = L.marker([60.67206949702055, 17.110107547842237]).addTo(map);
+  
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  maxZoom: 19,
+}).addTo(map);
+  
+marker.bindPopup("Kastmyrens Diskare").openPopup();
+</script>
+  
 </html>
