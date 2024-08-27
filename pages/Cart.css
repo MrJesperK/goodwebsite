@@ -3,14 +3,17 @@
     max-width: 90vw;
     margin: auto;
     text-align: center;
-    position: absolute;
     top:-2%;
     left: 9%;
     
 }
 
+
+
 svg{
     width: 30px;
+    position: absolute;
+    top: 10px;
 }
 
 header{
@@ -30,7 +33,7 @@ header .Icon-cart span {
     color: #fff;
     border-radius: 50%;
     position: absolute;
-    top: 40%;
-    right: -0.6%;
+    top: 20px;
+    right: 35px;
     
 }
