@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="crossorigin=""></script>
+    <style>
+        #map { height: 700px; max-width: 400px;}
+    </style>
+    
+</head>
+<body>
+    
+     <div id="map"></div>
+
+</body>
+    
+<script>
+var map = L.map('map').setView([60.671458778874054, 17.112507059977187], 16);
+var marker1 = L.marker([60.67369762473817, 17.10928821606452]).addTo(map);
+var marker2 = L.marker([60.67211666328942, 17.11226775574195]).addTo(map);
+var marker3 = L.marker([60.67087891854124, 17.113419097099623]).addTo(map);
+var marker4 = L.marker([60.670295853657734, 17.114903589562225]).addTo(map);
+var marker5 = L.marker([60.670797714563506, 17.109854558041345]).addTo(map);
+    
+var latlngs = [
+    [60.67369762473817, 17.10928821606452],
+    [60.67211666328942, 17.11226775574195],
+    [60.67087891854124, 17.113419097099623],
+    [60.670295853657734, 17.114903589562225],
+    [60.670797714563506, 17.109854558041345]
+];
+    
+var polyline = L.polyline(latlngs, {color: 'red', weight: 4}).addTo(map);
+    
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19,
+}).addTo(map);
+    
+
+</script>
+    
+</html>
+
