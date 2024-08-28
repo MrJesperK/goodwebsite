@@ -13,6 +13,20 @@
     left: 35%;
 }
 
+.D{
+    width: 380px;
+    padding: 10px;
+    background:#fff ;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    left: 35%;
+    height: 100%;
+    position: relative;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+}
+
 #prevBtn{
     color: black;
 }

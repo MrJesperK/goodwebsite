@@ -2,11 +2,12 @@ const monthYearEle = document.getElementById('monthYear');
 const datesEle = document.getElementById('dates');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
-
+const clickableDate = document.getElementById('day');
+const checkclick = document.getElementById('D');
 
 let currentDate = new Date();
 
-
+let dateclick ='';
 const updateCalendar = () => {
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth();
@@ -18,7 +19,7 @@ const updateCalendar = () => {
 
     const monthYearString = currentDate.toLocaleString('default', {month:'long', year: 'numeric'});
     monthYearEle.textContent = monthYearString
-
+   
     let datesHTML = '';
 
     for(let i = firstDayIndex; i > 0; i--){
@@ -29,7 +30,7 @@ const updateCalendar = () => {
     for(let i = 1; i <= totalDays; i++){
         const date = new Date(currentYear, currentMonth, i);
         const activeClass = date.toDateString() === new Date().toDateString() ? 'active': '';
-        datesHTML += `<div class="date ${activeClass}">${i}</div>`;
+        datesHTML += `<div class="date${activeClass}" index="${i}">${i}</div>`;
     }
 
     for (let i = 1; i <= 7 - lastDayIndex; i++){
@@ -38,6 +39,9 @@ const updateCalendar = () => {
     }
     datesEle.innerHTML = datesHTML;
 }   
+
+
+
 
 prevBtn.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
@@ -50,3 +54,23 @@ nextBtn.addEventListener('click', () => {
 })
 
 updateCalendar();
+
+document.querySelectorAll('.date').forEach(function(day){
+    day.addEventListener('click', function(){
+        console.log(this.getAttribute('index'));
+    })
+})
+
+let t = "";
+const timeSelect = ["16:30", "14:00", "18:45", "12:25", "10:40", "16:30", "14:00", "18:45", "12:25", "10:40" ];
+for(let x = 0; x != timeSelect.length; x++){
+t += `<div><input type="checkbox"<lable id="${x}">${timeSelect[x]}<br></div>`;
+}
+checkclick.innerHTML = t;
+
+
+document.querySelectorAll('.checkbox').forEach(function(time){
+    time.addEventListener('click', function(){
+        
+    })
+})
