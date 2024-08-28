@@ -4,7 +4,7 @@
             padding: 40px 0;
         }
 
-        .container {
+        .containerfooter {
             display: flex;
             justify-content: space-around;
             max-width: 1200px;
