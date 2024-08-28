@@ -1,0 +1,19 @@
+.welcome-div-smaller-devices{
+    display: none;
+}
+
+@media only screen and (max-width:900px){
+
+    .welcome-div{
+        display: none;
+    }
+
+    .welcome-div-smaller-devices{
+        display: block;
+    }
+}
+
+.showcase-images{
+    object-fit: cover;
+    max-height: 30rem;
+}
