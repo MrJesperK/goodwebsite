@@ -8,3 +8,8 @@
 .reviews::-webkit-scrollbar{
     display: none;
 }
+
+.item-list-padding {
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
