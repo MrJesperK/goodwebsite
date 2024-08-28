@@ -75,12 +75,6 @@ function check(a){
     console.log(timeSelect[a]);
    }
 }
-
-   
-   
-
-
-
 document.querySelectorAll('.checkbox').forEach(function(time){
     time.addEventListener('click', function(){
         
