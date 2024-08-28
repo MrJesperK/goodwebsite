@@ -1,5 +1,4 @@
 
-
 .calendar{
     width: 380px;
     height: auto;
@@ -52,6 +51,7 @@
     text-align: center;
     font-weight: 600;
     width: 150px;
+    text-transform: capitalize;
     
 }
 

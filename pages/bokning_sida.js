@@ -57,7 +57,7 @@ updateCalendar();
 
 document.querySelectorAll('.date').forEach(function(day){
     day.addEventListener('click', function(){
-        console.log(this.getAttribute('index'));
+        console.log(this.getAttribute('index')+ " "+ currentDate.toLocaleString('default', {month:'long', year: 'numeric'}));
     })
 })
 
@@ -72,6 +72,7 @@ checkclick.innerHTML = t;
 function check(a){
    if(document.getElementById('checkME'+a).checked === true){
     document.getElementById('btn').style.display = "block";
+    console.log(timeSelect[a]);
    }
 }
 
