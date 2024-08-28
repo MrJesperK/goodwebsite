@@ -8,19 +8,20 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="crossorigin=""></script>
      
+    <link rel="stylesheet" href="color.css">
     <link rel="stylesheet" href="Cart.css">
     <link rel="stylesheet" href="footer.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
    
     <style>
-        #map {height: 700px; }
+        #map {height: 900px; }
         #hole_box {
             display: flex;
             gap: 20px; 
             padding: 20px;
-            background-color: #f0f0f0;
-            border-radius: 10px; /* Rounded corners for the container */
+            /*background-color: #f0f0f0;*/
+            /*border-radius: 10px;  Rounded corners for the container */
             overflow: hidden; /* Ensures children elements respect the border radius */
         }
         
@@ -40,7 +41,7 @@
         .box {
             flex: 1; 
             padding: 20px;
-            background-color: #fff;
+            /*background-color: #fff;*/
             border: 1px solid #ccc;
             text-align: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -54,7 +55,7 @@
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            border-radius: 10px; 
+            /*border-radius: 10px; */
             overflow: hidden; 
         }
 
@@ -67,8 +68,8 @@
         th {
             background-color: grey;
             color: white;
-            border-top-left-radius: 10px; 
-            border-top-right-radius: 10px; 
+            /*border-top-left-radius: 10px; 
+            border-top-right-radius: 10px;*/
         }
 
         td {
@@ -117,7 +118,7 @@
       </li>
     </ul>
     <div class="container">
-      <header>
+      <header style="padding: 0px;">
           <div></div>
           <div class="Icon-cart">
               <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
@@ -130,9 +131,9 @@
     <!--Navbar-->
 
 <body>
-    <div id="hole_box">
+    <div id="hole_box" class="dark-green">
         <div id="map" class="box"></div>
-        <div id="hole_list" class="box">
+        <div id="hole_list" class="box light-green">
             <table border="1">
                 <tr>
                     <th>Column 1</th>
