@@ -1,0 +1,10 @@
+.ItemCard:hover{
+    /* transform: scale(1.01); */
+    transform: translateY(-5px);
+    transition-duration: 100ms;
+    transition-timing-function: ease-in-out;
+}
+
+.reviews::-webkit-scrollbar{
+    display: none;
+}
