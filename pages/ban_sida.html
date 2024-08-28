@@ -22,6 +22,19 @@
             border-radius: 10px; /* Rounded corners for the container */
             overflow: hidden; /* Ensures children elements respect the border radius */
         }
+        
+        @media (max-width: 768px) {
+          #hole_box {
+            display: block;
+          }
+
+          .box {
+            width: 100%; /* Make sure each div takes full width when stacked */
+            margin-bottom: 10px; /* Optional: adds some spacing between stacked divs */
+          }
+            
+          #map {height: 400px; }
+        }
 
         .box {
             flex: 1; 
