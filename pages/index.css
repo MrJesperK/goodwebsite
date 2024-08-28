@@ -17,3 +17,25 @@
     object-fit: cover;
     max-height: 30rem;
 }
+
+.font-tests{
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+.font-welcome{
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-shadow: 3px 3px 3px rgb(165, 165, 165);
+}
+
+.font-intro{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.images-backdrop{
+    
+    background-image: linear-gradient(to right, rgb(144, 177, 0), rgb(117, 143, 2));
+}
+
+.welcome-button{
+    background-image: linear-gradient(to left, rgb(144, 177, 0), rgb(117, 143, 2))
+}
