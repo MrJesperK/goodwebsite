@@ -2,6 +2,18 @@
     display: none;
 }
 
+.info-bilder{
+    display: flex;
+}
+
+.text-box{
+    width: 25%;
+}
+
+.picture-box{
+    width: 50%;
+}
+
 @media only screen and (max-width:900px){
 
     .welcome-div{
@@ -10,6 +22,18 @@
 
     .welcome-div-smaller-devices{
         display: block;
+    }
+    
+    .info-bilder{
+        display: block;
+    }
+    
+    .text-box{
+        width: auto;
+    }
+    
+    .picture-box{
+    width: auto;
     }
 }
 
@@ -33,9 +57,11 @@
 
 .images-backdrop{
     
-    background-image: linear-gradient(to right, rgb(144, 177, 0), rgb(117, 143, 2));
+    /*background-image: linear-gradient(to right, rgb(144, 177, 0), rgb(117, 143, 2));*/
+    background-color: #5F6F52;
 }
 
 .welcome-button{
-    background-image: linear-gradient(to left, rgb(144, 177, 0), rgb(117, 143, 2))
+    /*background-image: linear-gradient(to left, rgb(144, 177, 0), rgb(117, 143, 2));*/
+    background-color: #A9B388;
 }
