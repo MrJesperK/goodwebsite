@@ -200,7 +200,6 @@ var latlngs = [
     [[60.67365643423952, 17.10918416609711],[60.67222418531065, 17.10946348633066]],
 ];
     
-    
 var map = L.map('map').setView([60.671458778874054, 17.112507059977187], 16);
     
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -208,9 +207,15 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 }).addTo(map);
     
 
+var customIcon = L.icon({
+    iconUrl: '../images/frisbee-player-svgrepo-com',
+    iconSize: [40, 40], // Size of the icon
+    iconAnchor: [20, 40], // Point of the icon which will correspond to marker's location
+});
+    
 let i = 1;    
 latlngs.forEach(function(pair){
-    L.marker(pair[0]).addTo(map).bindPopup("Hål " + i.toString() + " start")
+    L.marker(pair[0], { icon: customIcon }).addTo(map).bindPopup("Hål " + i.toString() + " start")
     L.marker(pair[1]).addTo(map).bindPopup("Hål " + i.toString() + " korg")
     i++;
 })
