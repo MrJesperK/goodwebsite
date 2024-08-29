@@ -22,7 +22,7 @@
             padding: 20px;
             /*background-color: #f0f0f0;*/
             /*border-radius: 10px;  Rounded corners for the container */
-            overflow: hidden; /* Ensures children elements respect the border radius */
+            overflow: hidden; 
         }
         
         @media (max-width: 768px) {
@@ -31,8 +31,8 @@
           }
 
           .box {
-            width: 100%; /* Make sure each div takes full width when stacked */
-            margin-bottom: 10px; /* Optional: adds some spacing between stacked divs */
+            width: 100%; 
+            margin-bottom: 10px; 
           }
             
           #map {height: 400px; }
@@ -180,36 +180,49 @@
 <script>
     
 var latlngs = [
-    [60.67369762473817, 17.10928821606452],
-    [60.67211666328942, 17.11226775574195],
-    [60.67087891854124, 17.113419097099623],
-    [60.670295853657734, 17.114903589562225],
-    [60.670797714563506, 17.109854558041345]
+    [[60.671784226286235, 17.1103799942964], [60.67118599027206, 17.111615157929396]],
+    [[60.67145397972065, 17.112413731276625],[60.67204544350032, 17.11033025615419]],
+    [[60.67210905566979, 17.10904259116835],[60.67142284974825, 17.110037353837377]],
+    [[60.67179776090364, 17.109606290013765],[60.67108447852626, 17.11041591628423]],
+    [[60.66954952223488, 17.109322707642562],[60.66935454866401, 17.1079651435478]],
+    [[60.670547145334346, 17.109517639619273],[60.67022281059744, 17.11074335577617]],
+    [[60.670275365731996, 17.11082253488879],[60.6711989050397, 17.113169748552732]],
+    [[60.670657744158476, 17.11370056529265],[60.670348347715375, 17.11467582468626]],
+    [[60.670225211142494, 17.115246406289728],[60.66985569116077, 17.11466807067411]],
+    [[60.66976021311361, 17.114559613718],[60.670174459607495, 17.111378385737172]],
+    [[60.67031313691757, 17.11172880099968],[60.67071811281523, 17.1135238812486]],
+    [[60.67166671348708, 17.11335981474914],[60.672520745316966, 17.11292552114402]],
+    [[60.6723269356567, 17.113919570959283],[60.67295563103943, 17.114550100939194]],
+    [[60.67283745615275, 17.11209875479281],[60.67188571772872, 17.112694793513985]],
+    [[60.67174006015992, 17.11287876772491],[60.672360777693186, 17.111207120815532]],
+    [[60.67269479308537, 17.111409531153555],[60.6727117998503, 17.110749812991273]],
+    [[60.67230208892353, 17.11044047146063],[60.67353584416043, 17.10982494496246]],
+    [[60.67365643423952, 17.10918416609711],[60.67222418531065, 17.10946348633066]],
 ];
     
     
 var map = L.map('map').setView([60.671458778874054, 17.112507059977187], 16);
-var marker1 = L.marker(latlngs[0]).addTo(map);
-var marker2 = L.marker(latlngs[1]).addTo(map);
-var marker3 = L.marker(latlngs[2]).addTo(map);
-var marker4 = L.marker(latlngs[3]).addTo(map);
-var marker5 = L.marker(latlngs[4]).addTo(map);
-     
-var polyline = L.polyline(latlngs, {color: 'red', weight: 4}).addTo(map);
-    
-console.log(polyline)
     
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19,
 }).addTo(map);
     
+
+let i = 1;    
+latlngs.forEach(function(pair){
+    L.marker(pair[0]).addTo(map).bindPopup("Hål " + i.toString() + " start")
+    L.marker(pair[1]).addTo(map).bindPopup("Hål " + i.toString() + " korg")
+    i++;
+})
+
     
-marker1.bindPopup("Hål 1");
-marker2.bindPopup("Hål 2");
-marker3.bindPopup("Hål 3");
-marker4.bindPopup("Hål 4");
-marker5.bindPopup("Hål 5");
+var polyline = L.polyline(latlngs, {color: 'red', weight: 4, dashArray: '10, 10', dashOffset: '0'}).addTo(map);
     
+
+    
+
+    
+
   
 function highlightRow(rowId) {
         var row = document.getElementById(rowId);
@@ -224,7 +237,7 @@ marker1.on('click', function() {
         highlightRow('row1');
     });
     
-marker2.on('click', function() {
+/*marker2.on('click', function() {
         highlightRow('row2');
     });
     
@@ -239,7 +252,7 @@ marker4.on('click', function() {
 marker5.on('click', function() {
         highlightRow('row5');
     });
-    
+    */
 document.querySelectorAll('table tr').forEach(function(row) {
             row.addEventListener('click', function() {
                 map.setView(latlngs[this.getAttribute('index')], 18);
