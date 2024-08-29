@@ -45,7 +45,8 @@
     
       </div>
 
-      <div class="w-75 p-3 border border-black rounded m-auto mb-4" >
+      <div class="p-5 shop_img w-100 position-absolute"></div>
+      <div class="w-75 p-3 border border-black rounded m-auto mb-5 bg-white filter_box" >
 
         <h4 class="text-center text-decoration-underline m-auto">filtrera</h4>
 
@@ -65,9 +66,9 @@
                 </form>
             </div>
         </div>
-
-        <hr>
        
+        <hr>
+
         <div id="filters_hideable">
             <span>[hideable filters here]</span>
         </div>
@@ -80,20 +81,14 @@
           </div>
       </div>
 
-
-
-
-
-      <hr>
-
       <h1 class="text-center text-decoration-underline">Shop</h1>
 
       <div class=" w-100 row justify-content-center gap-5 item-list-padding">
       <button type="button" class="card p-0 col-3 ItemCard" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#item_1_modal">
-        <img src="../images/360_F_517535712_q7f9QC9X6TQxWi6xYZZbMmw5cnLMr279.jpg" class="card-img-top" alt="...">
+        <img src="../images/example.jpg" class="card-img-top" alt="...">
         <div class="card-body m-auto">
-          <h5 class="card-title">vara #1</h5>
-          <p class="card-text">ja du här var det text</p>
+          <h5 class="card-title">Kastmyrens signatur frisbee</h5>
+          <p class="card-text">Nå toppen!</p>
           <div class="btn btn-primary w-100">visa</div>
         </div>
       </button>
@@ -112,16 +107,26 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body row m-0 p-0">
-         <img src="../images/elementor-placeholder-image.webp" alt="item" class="col" style="max-width: 100%; height: auto; transform: scale(0.7);"/>
+            <div class="w-50">
+             <img src="../images/example.jpg" alt="item" class="col" style="max-width: 100%; height: auto; transform: scale(0.7);"/>
+            </div>
 
          <div class="col border-start">
-            <h2 class="text-decoration-underline text-center">Vara 1</h2>
+            <h2 class="text-decoration-underline text-center">kastmyrens signatur frisbee</h2>
             <p class="fs-4 fw-semibold">           
-                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tenetur consectetur a odio fugiat voluptatum vitae veniam iure veritatis? Modi omnis aperiam quaerat fugit dolore obcaecati perferendis et! Repudiandae, laudantium fuga.
+                 Det här är en frisbee som kommer att ta dig till toppen av diskgolf spelande. Denna har använts av alla mästare inom diskgolfen, och nu är det <strong>DIN</strong> tur att nå den toppen!
             </p>
             <hr>
             <div class="col overflow-y-scroll overflow-x-hidden reviews">
                 <h3 class="text-decoration-underline text-center">Recensioner</h3>
+
+                <form class="w-100 row justify-content-center">
+                    <input type="text" name="review" id="review" class="rounded w-50 me-2" placeholder="Skriv en recension">
+                    <button type="submit" class="btn btn-primary w-25">Skicka!</button>
+                </form>
+
+                <hr>
+
                 <div class="card mb-3 shadow-sm">
                     <div class="card-header">
                       Användare
@@ -156,7 +161,11 @@
          
         </div>
         <div class="modal-footer">
-          <h3 class="me-4">9999 SEK</h3>
+          <h3 class="me-4">
+           <strong>
+            349 SEK
+           </strong>
+           </h3>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stäng</button>
           <button type="button" class="btn btn-primary">Lägg till i kundvagn</button>
         </div>
