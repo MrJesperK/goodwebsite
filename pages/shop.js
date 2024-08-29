@@ -23,3 +23,12 @@ let label = document.getElementById('filter_label');
         label.style.display = "block";
     }
 }
+
+
+
+function test(){
+    let range_label = document.getElementById("range_lowest");
+let range_input = document.getElementById("lower");
+    range_label.innerText = "Lägsta pris: " + range_input.value + "kr";
+}
+
