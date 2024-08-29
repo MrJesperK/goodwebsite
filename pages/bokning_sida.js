@@ -92,4 +92,7 @@ document.querySelectorAll('.checkbox').forEach(function(time){
 
 function BtnClick(){
     document.getElementById('btn').addEventListener('click', function(){
-    console.log(booktime)})}
+    console.log(booktime)})
+    alert("Bokning Sparad");
+    window.location.replace("index.html");
+}
