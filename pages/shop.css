@@ -21,3 +21,17 @@
 #filter_button{
     display: none;
 }
+
+.shop_img {
+    background-image:url("../images/95251913-6469-5d23-b77d-6866b41c7bbb.jpg");
+    object-fit: cover;
+    filter: blur(2px);
+    z-index: -10;
+    height: 30%;
+    top: 1rem;
+}
+
+.filter_box {
+    bottom: 1.5rem;
+    position: relative;
+}
