@@ -37,13 +37,29 @@ body {
 #btn{
     display: none;
     width: 380px;
-    left: 37.58%;
+    margin: auto;
     position: relative;
+    margin-bottom: 10px;
+    height: 50px;
+}
 
+#btn:hover{
+    transition: 0.6s ease-in;
+    background: goldenrod;
 }
 
 #prevBtn{
     color: black;
+}
+
+#prevBtn:hover{
+    transition: 0.6s ease-in;
+    background: lightgray;
+}
+
+#nextBtn:hover{
+    transition: 0.6s ease-in;
+    background: lightgray;
 }
 
 .header{
@@ -115,6 +131,7 @@ body {
 
 .date:hover,
 .date:active{
+    transition: 0.6s ease-in;
     background: crimson;
     color: #fff;
 }
