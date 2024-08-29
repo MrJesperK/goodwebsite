@@ -40,34 +40,46 @@
         </header>
       </div>
 
-      <div class="w-75 p-3 border border-black rounded m-auto mb-4">
+      <div class="w-75 p-3 border border-black rounded m-auto mb-4" >
 
         <h4 class="text-center text-decoration-underline m-auto">filtrera</h4>
 
-        <div id="filters" class="row w-25">
-            <div class="col">
-                <label for="">minimum pris: </label>
-                <input type="range" min="1" max="100" value="1" class="slider">
-              </div>
-              <div class="col">
-                <label for="">maximum pris: </label>
-                <input type="range" min="1" max="100" value="100" class="slider">
-              </div>
+        <div class="row flex-column gap-3" id="filters_always_shown">
+            <form>
+                <input type="text" name="search" id="search" class="w-25" placeholder="Sök">
+                <button type="submit" class="btn btn-success">Sök</button>
+            </form>
+
+            <div>
+                <form>
+                    <span class="multi-range w-25">
+                        <span>lägsta pris: [pris]</span>
+                        <input type="range" min="0" max="50" value="0" id="lower">
+
+                    </span>
+                </form>
+            </div>
         </div>
 
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              sortera efter:
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Inget speciellt</a></li>
-              <li><a class="dropdown-item" href="#">pris lågt-högt</a></li>
-              <li><a class="dropdown-item" href="#">pris högt-lågt</a></li>
-            </ul>
+        <hr>
+       
+        <div id="filters_hideable">
+            <span>[random filters here]</span>
+        </div>
+
+        <div class="w-25 m-auto row justify-content-center">
+            <div class="col text-center">
+            <input type="checkbox" checked class="col" id="filter_button" onclick="filtersHideShow()"></input>
+            <label for="filter_button" id="filter_label" class="col btn btn-primary w-100">Göm filter &uarr;</label>
+            </div>
           </div>
-          
       </div>
 
+
+
+
+
+      <hr>
 
       <h1 class="text-center text-decoration-underline">Shop</h1>
 
