@@ -13,3 +13,11 @@
     padding-bottom: 20px;
     padding-top: 20px;
 }
+
+#filter_label:hover{
+    cursor: pointer;
+}
+
+#filter_button{
+    display: none;
+}

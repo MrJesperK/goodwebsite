@@ -54,17 +54,25 @@ nextBtn.addEventListener('click', () => {
 })
 
 updateCalendar();
-
+let booktime = {date: "",time:""}
 document.querySelectorAll('.date').forEach(function(day){
     day.addEventListener('click', function(){
-        console.log(this.getAttribute('index')+ " "+ currentDate.toLocaleString('default', {month:'long', year: 'numeric'}));
+        booktime.date=(this.getAttribute('index')+ " "+ currentDate.toLocaleString('default', {month:'long', year: 'numeric'}));
+        console.log(booktime);
+        day.style.backgroundColor = "crimson";
+        day.style.color = "white";
+        console.log(day);                                                                          
     })
+    
 })
+
+
 
 let t = "";
 const timeSelect = ["16:30", "14:00", "18:45", "12:25", "10:40", "16:30", "14:00", "18:45", "12:25", "10:40" ];
 for(let x = 0; x != timeSelect.length; x++){
 t += `<div><input type="radio" name="checkME" onclick="check(${x})" id='checkME${x}' <lable id="${x}">${timeSelect[x]}<br></div>`;
+
 
 }
 checkclick.innerHTML = t;
@@ -72,7 +80,8 @@ checkclick.innerHTML = t;
 function check(a){
    if(document.getElementById('checkME'+a).checked === true){
     document.getElementById('btn').style.display = "block";
-    console.log(timeSelect[a]);
+    booktime.time=timeSelect[a];
+    console.log(booktime);
    }
 }
 document.querySelectorAll('.checkbox').forEach(function(time){
@@ -80,3 +89,7 @@ document.querySelectorAll('.checkbox').forEach(function(time){
         
     })
 })
+
+function BtnClick(){
+    document.getElementById('btn').addEventListener('click', function(){
+    console.log(booktime)})}
