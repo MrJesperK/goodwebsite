@@ -274,7 +274,7 @@ latlngs.forEach(function(pair){
     var midpointLng = (lng1 + lng2) / 2;
     
     var coords = [midpointLat, midpointLng]
-    console.log()
+
     var numberIcon = L.divIcon({
       className: 'number-icon',
       html: (j).toString(), // Convert the index to a string to display as the marker label
@@ -283,7 +283,7 @@ latlngs.forEach(function(pair){
     });
 
     // Add the marker with the custom icon to the map
-    L.marker(coords, { icon: numberIcon }).addTo(map).on('click', function(){highlightRow(row); map.setView(pair[0], 18);})
+    L.marker(coords, { icon: numberIcon }).addTo(map).on('click', function(){highlightRow(row); map.setView(coords, 18);})
     
     L.marker(pair[0], { icon: customIconStart }).addTo(map).bindPopup("Hål " + j.toString() + " start").on('click', function(){highlightRow(row); map.setView(pair[0], 18);})
     L.marker(pair[1], { icon: customIconEnd }).addTo(map).bindPopup("Hål " + j.toString() + " slut").on('click', function(){highlightRow(row); map.setView(pair[1], 18);})
