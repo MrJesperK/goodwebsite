@@ -93,9 +93,6 @@
             background-color: #f1f1f1;
         }
         
-        tr{
-            
-        }
         
         .highlight {
             background-color: lightgreen;
@@ -137,6 +134,20 @@
         .table-list::-webkit-scrollbar-thumb:hover {
             background-color: #555; /* Color of the scrollbar thumb on hover */
         }
+        
+        .number-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            font-size: 18px;                
+            font-weight: 600;               
+            
+         }
         
         
     </style>
@@ -250,6 +261,27 @@ var customIconEnd = L.icon({
 let j = 1;    
 latlngs.forEach(function(pair){
     let row = ('row'+j.toString())
+    
+    var lat1 = pair[0][0];
+    var lat2 = pair[1][0];
+                
+    var lng1 = pair[0][1];
+    var lng2 = pair[1][1];            
+    var midpointLat = (lat1 + lat2) / 2;
+    var midpointLng = (lng1 + lng2) / 2;
+    
+    var coords = [midpointLat, midpointLng]
+
+    var numberIcon = L.divIcon({
+      className: 'number-icon',
+      html: (j).toString(), // Convert the index to a string to display as the marker label
+      iconSize: [25, 25],           // Size of the icon
+      iconAnchor: [15, 15]          // Center the icon
+    });
+
+    // Add the marker with the custom icon to the map
+    L.marker(coords, { icon: numberIcon }).addTo(map).on('click', function(){highlightRow(row); map.setView(coords, 18);})
+    
     L.marker(pair[0], { icon: customIconStart }).addTo(map).bindPopup("Hål " + j.toString() + " start").on('click', function(){highlightRow(row); map.setView(pair[0], 18);})
     L.marker(pair[1], { icon: customIconEnd }).addTo(map).bindPopup("Hål " + j.toString() + " slut").on('click', function(){highlightRow(row); map.setView(pair[1], 18);})
     j++;
