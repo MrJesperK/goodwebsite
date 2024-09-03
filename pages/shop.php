@@ -1,3 +1,21 @@
+<?php
+require '../db/dbconn.php';
+
+$supabaseUrl = 'https://emuaejyzofclcsxmilhr.supabase.co'; // Replace with your Supabase project URL
+$bucketName = 'kastmyrensBilder'; // Your Supabase bucket name
+
+
+$query = 'SELECT * FROM products';
+
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,22 +116,31 @@
       <h1 class="text-center text-decoration-underline">Shop</h1>
 
       <div class=" w-100 row justify-content-center gap-5 item-list-padding">
-      <button type="button" class="card p-0 col-3 ItemCard" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#item_1_modal">
-        <img src="../images/example.jpg" class="card-img-top" alt="...">
-        <div class="card-body m-auto">
-          <h5 class="card-title">Kastmyrens signatur frisbee</h5>
-          <p class="card-text">Nå toppen!</p>
-          <div class="btn btn-primary w-100">visa</div>
-        </div>
-      </button>
+      <?php foreach ($results as $row): 
+          
+        $imageNames = explode(',', $row['imageurls']);
 
-      
+        $imageUrls = array_map(function ($imageName) use ($supabaseUrl, $bucketName) {
+            return "$supabaseUrl/storage/v1/object/public/$bucketName/webbshop/$imageName";
+        }, $imageNames);
 
-    </div>
+        
+     
+       ?>
+    
 
-  
-  <!-- Modal -->
-  <div class="modal fade " id="item_1_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <button type="button" class="card p-0 col-3 ItemCard" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#item_<?php echo $row['id'] ?>_modal">
+            <img src="../images/example.jpg" class="card-img-top" alt="...">
+            <div class="card-body m-auto">
+              <h5 class="card-title"><?php echo $row['name'] ?></h5>
+              <p class="card-text">Nå toppen!</p>
+              <div class="btn btn-primary w-100">visa</div>
+            </div>
+          </button>
+          
+          
+    
+      <div class="modal fade " id="item_<?php echo $row['id']; ?>_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
       <div class="modal-content">
         <div class="modal-header">
@@ -122,13 +149,37 @@
         </div>
         <div class="modal-body row m-0 p-0">
             <div class="w-50">
-             <img src="../images/example.jpg" alt="item" class="col" style="max-width: 100%; height: auto; transform: scale(0.7);"/>
+                <div class="ms-2 picture-box bg-transparent my-2">
+       <div id="carouselExampleInterval" class="carousel slide shadow" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <?php for ($i = 1; $i != sizeof($imageUrls); $i++): ?> 
+                <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="<?php echo $i ?>" aria-label="Slide <?php echo $i ?>"></button>
+            <?php endfor; ?>
+          </div>
+           <div class="carousel-inner">
+            <?php foreach ($imageUrls as $imageurl): ?>
+             <div class="carousel-item active">
+               <img src="<?php echo $imageurl?>" class="d-block w-100 showcase-images" alt="...">
+             </div>
+            <?php endforeach; ?>
+           </div>
+           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+             <span class="visually-hidden">Previous</span>
+           </button>
+           <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+             <span class="carousel-control-next-icon" aria-hidden="true"></span>
+             <span class="visually-hidden">Next</span>
+           </button>
+         </div>
+        </div>
             </div>
 
          <div class="col border-start">
-            <h2 class="text-decoration-underline text-center">kastmyrens signatur frisbee</h2>
+            <h2 class="text-decoration-underline text-center"><?php echo $row['name'] ?></h2>
             <p class="fs-4 fw-semibold">           
-                 Det här är en frisbee som kommer att ta dig till toppen av diskgolf spelande. Denna har använts av alla mästare inom diskgolfen, och nu är det <strong>DIN</strong> tur att nå den toppen!
+                 <?php echo $row['description']?>
             </p>
             <hr>
             <div class="col overflow-y-scroll overflow-x-hidden reviews">
@@ -177,7 +228,7 @@
         <div class="modal-footer">
           <h3 class="me-4">
            <strong>
-            349 SEK
+            <?php echo $row['price'] ?>
            </strong>
            </h3>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stäng</button>
@@ -186,7 +237,10 @@
       </div>
     </div>
   </div>
-  
+            
+      <?php endforeach; ?>
+        
+    </div>
   <script src="../scripts/shop.js"></script>
   <script src="../scripts/sidomeny.js"></script>
 </body>
