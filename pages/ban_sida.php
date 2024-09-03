@@ -155,34 +155,37 @@
 </head>
     
     <!--Navbar-->
-    <ul class="nav nav-underline bg-body-tertiary border-bottom border-top justify-content-center">
+    <ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
         <div id="main">
-            <span class="hamburg" onclick="openNav()">&#9776;</span>
-          </div>
-    
-          <div id="mySidenav" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <a href="#">About</a>
-            <a href="#">Services</a>
-            <a href="#">Clients</a>
-            <a href="#">Contact</a>
-          </div>
+          <span class="hamburg" onclick="openNav()">&#9776;</span>
+        </div>
+  
+        <div id="mySidenav" class="sidenav">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="#">About</a>
+          <a href="#">Services</a>
+          <a href="#">Clients</a>
+          <a href="#">Contact</a>
+        </div>
       <li class="nav-item">
-        <a class="nav-link" style="color:black; font-size: 20px;" aria-current="page" href="index.html">Hem</a>
+        <a class="nav-link" style="color:black; font-size: 20px;" aria-current="page" href="index.php">Hem</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" style="color: black; font-size: 20px;" href="shop.html">Webbshop</a>
+        <a class="nav-link" style="color: black; font-size: 20px;" href="shop.php">Webbshop</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active" style="color: black; font-size: 20px;" href="ban_sida.html">Karta</a>
+        <a class="nav-link active" style="color: black; font-size: 20px;" href="ban_sida.php">Karta</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" style="color:black; font-size: 20px;" href="bokning_sida.html">Bokning</a>
-      </li>
-    </ul>
+        <a class="nav-link" style="color:black; font-size: 20px;"  href="bokning_sida.php">Bokning</a>
+      </li>     
+      <li class="nav-item">
+        <a class="nav-link" style="color:black; font-size: 20px;"  href="login.php">Logga in</a>
+      </li> 
+</ul>
     <!--Navbar-->
 
-<body class="font-tests">
+<body class="font-tests d-flex flex-column min-vh-100">
     <div id="hole_box" class="dark-green">
         <div id="map" class="box"></div>
         <div id="hole_list" class="box light-green table-container">
@@ -200,7 +203,7 @@
     </div>
 </body>
     
-<footer class="footer">
+<footer class="footer mt-auto">
         <div class="containerfooter">
             <div class="footer-section">
                 <h4>Contact Us</h4>

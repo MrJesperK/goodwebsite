@@ -13,22 +13,36 @@
 
 
 </head>
-<body class="w-100 m-0 p-0">
+<body class="d-flex flex-column min-vh-100">
     
-    <ul class="nav nav-underline bg-body-tertiary justify-content-center">
-        <li class="nav-item">
-          <a class="nav-link" style="color:black; font-size:20px ;" aria-current="page" href="index.html">Hem</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" style="color: black; font-size: 20px;" href="shop.html">Webbshop</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" style="color: black; font-size: 20px;" href="ban_sida.html">Karta</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" style="color:black; font-size: 20px;" href="bokning_sida.html">Bokning</a>
-        </li>
-      </ul>
+<ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
+        <div id="main">
+          <span class="hamburg" onclick="openNav()">&#9776;</span>
+        </div>
+  
+        <div id="mySidenav" class="sidenav">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="#">About</a>
+          <a href="#">Services</a>
+          <a href="#">Clients</a>
+          <a href="#">Contact</a>
+        </div>
+      <li class="nav-item">
+        <a class="nav-link" style="color:black; font-size: 20px;" aria-current="page" href="index.php">Hem</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" style="color: black; font-size: 20px;" href="shop.php">Webbshop</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="color: black; font-size: 20px;" href="ban_sida.php">Karta</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="color:black; font-size: 20px;"  href="bokning_sida.php">Bokning</a>
+      </li>     
+      <li class="nav-item">
+        <a class="nav-link" style="color:black; font-size: 20px;"  href="login.php">Logga in</a>
+      </li> 
+</ul>
       <div class="container">
 
             <div id="main">
@@ -177,7 +191,7 @@
   <script src="../scripts/sidomeny.js"></script>
 </body>
     
-<footer class="footer">
+<footer class="footer mt-auto">
         <div class="containerfooter">
             <div class="footer-section">
                 <h4>Contact Us</h4>

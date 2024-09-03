@@ -1,3 +1,11 @@
+<?php
+require '../db/dbconn.php';
+
+if (isset($_POST['logout']) && $_SERVER['REQUEST_METHOD'] == "POST") {
+session_destroy();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,9 +38,16 @@
 </head>
 
 
-  <body class="font-tests">
+  <body class="font-tests d-flex flex-column min-vh-100">
     <!--Navbar-->
     <ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
+
+    <?php if (isset($_SESSION['username'])): ?>
+    <li class="nav-item">
+      <a href="user.php" class="nav-link" style="color:black; font-size: 20px;">Mina sidor</a>
+    </li>
+    <?php endif; ?>
+
         <div id="main">
           <span class="hamburg" onclick="openNav()">&#9776;</span>
         </div>
@@ -45,17 +60,29 @@
           <a href="#">Contact</a>
         </div>
       <li class="nav-item">
-        <a class="nav-link active" style="color:black; font-size: 20px;" aria-current="page" href="index.html">Hem</a>
+        <a class="nav-link active" style="color:black; font-size: 20px;" aria-current="page" href="index.php">Hem</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" style="color: black; font-size: 20px;" href="shop.html">Webbshop</a>
+        <a class="nav-link" style="color: black; font-size: 20px;" href="shop.php">Webbshop</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" style="color: black; font-size: 20px;" href="ban_sida.html">Karta</a>
+        <a class="nav-link" style="color: black; font-size: 20px;" href="ban_sida.php">Karta</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" style="color:black; font-size: 20px;"  href="bokning_sida.html">Bokning</a>
+        <a class="nav-link" style="color:black; font-size: 20px;"  href="bokning_sida.php">Bokning</a>
       </li>     
+      <?php if (!isset($_SESSION['username'])):?>
+      <li class="nav-item">
+        <a class="nav-link" style="color:black; font-size: 20px;"  href="login.php">Logga in</a>
+      </li> 
+      <?php endif;?>
+      <?php if (isset($_SESSION['username'])):?>
+      <li class="nav-item">
+        <form method="post">
+        <button type="submit" name="logout" class="nav-link" style="color:black; font-size: 20px;">Logga ut</button>
+        </form>
+      </li> 
+      <?php endif;?>
 </ul>
 <br>
 <div class="container-fluid w-25 h-auto m-auto p-4 border border-black welcome-div font-welcome rounded">
@@ -115,7 +142,7 @@
 </body>
 <div id="map"></div>
     
-    <footer class="footer">
+<footer class="footer mt-auto">
         <div class="containerfooter">
             <div class="footer-section">
                 <h4>Contact Us</h4>
