@@ -1,7 +1,7 @@
 <?php
 require '../db/dbconn.php';
 
-if (isset($_POST['logout']) && $_SERVER['REQUEST_METHOD'] == "POST") {
+if (isset($_POST['logout'])) {
 session_destroy();
 }
 ?>

@@ -119,6 +119,8 @@ if (isset($_POST['logout'])){
         <input type="submit" name="login" value="Logga in!" class="w-100 m-auto mb-3 text-center btn btn-primary">
 
         <a href="createUser.php">Har du inget konto?</a>
+        <hr>
+        <a href="#">Glömt lösenord?</a>
     </form>
     </div>
 

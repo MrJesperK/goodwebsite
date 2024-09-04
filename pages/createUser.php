@@ -1,7 +1,7 @@
 <?php
 require '../db/dbconn.php';
 
-if (isset($_POST['createUser']) && $_SERVER['REQUEST_METHOD'] == "POST") {
+if (isset($_POST['createUser'])) {
 
   $name = htmlspecialchars($_POST['username']);
   $password = htmlspecialchars($_POST['password']);
@@ -100,7 +100,7 @@ if (isset($_POST['createUser']) && $_SERVER['REQUEST_METHOD'] == "POST") {
     <input type="checkbox" name="showPass" id="showPass" onclick="showPassword()"> 
     </div>
 
-    <input type="submit" name="login" value="Registrera användare" class="w-100 m-auto text-center btn btn-primary">
+    <input type="submit" name="createUser" value="Registrera användare" class="w-100 m-auto text-center btn btn-primary">
 </form>
 </div>
 

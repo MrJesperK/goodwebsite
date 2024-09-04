@@ -5,7 +5,9 @@ $password = 'LdqbPBvHoCcbFeCz';
 
 try {
     $pdo = new PDO($dsn, $user, $password);
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
