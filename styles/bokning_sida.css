@@ -144,6 +144,10 @@ body {
     color: #fff;
 }
 
+.dateactive {
+    background-color: gray;
+}
+
 
 .date.inactive {
     color: #d2d2d2;

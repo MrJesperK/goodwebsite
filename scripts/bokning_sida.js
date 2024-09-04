@@ -25,23 +25,21 @@ const updateCalendar = () => {
 
     for(let i = firstDayIndex; i > 0; i--){
         const prevDate = new Date(currentYear, currentMonth, 0 - i + 1);
-        datesHTML +=`<div class="date inactive">${prevDate.getDate()}</div>`
+        datesHTML +=`<option disabled class="date inactive">${prevDate.getDate()}</option>`
     }
 
     for(let i = 1; i <= totalDays; i++){
         const date = new Date(currentYear, currentMonth, i);
         const activeClass = date.toDateString() === new Date().toDateString() ? 'active': '';
-        datesHTML += `<div class="date${activeClass}" index="${i}">${i}</div>`;
+        datesHTML += `<option class="date ${activeClass}" index="${i}">${i}</option>`;
     }
 
     for (let i = 1; i <= 7 - lastDayIndex; i++){
         const nextDate = new Date(currentYear, currentMonth + 1, i);
-        datesHTML += `<div class="date inactive">${nextDate.getDate()}</div>`;
+        datesHTML += `<option disabled class="date inactive">${nextDate.getDate()}</option>`;
     }
     datesEle.innerHTML = datesHTML;
 }   
-
-
 
 prevBtn.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
@@ -58,18 +56,14 @@ let booktime = {date: "",time:""}
 document.querySelectorAll('.date').forEach(function(day){
     day.addEventListener('click', function(){
         booktime.date=(this.getAttribute('index')+ " "+ currentDate.toLocaleString('default', {month:'long', year: 'numeric'}));
-        console.log(booktime);
-        day.style.backgroundColor = "crimson";
-        day.style.color = "white";
-        console.log(day);                                                                          
-    })
-    
+          
+                                                                       
+    })  
 })
 
 
-
 let t = "";
-const timeSelect = ["16:30", "14:00", "18:45", "12:25", "10:40", "16:30", "14:00", "18:45", "12:25", "10:40" ];
+const timeSelect = ["16:30", "14:00", "18:45", "12:25", "10:40", "11:24", "14:00", "18:45", "12:25", "10:40" ];
 for(let x = 0; x != timeSelect.length; x++){
 t += `<div><input type="radio" name="checkME" onclick="check(${x})" id='checkME${x}' <lable id="${x}">${timeSelect[x]}<br></div>`;
 
@@ -93,6 +87,6 @@ document.querySelectorAll('.checkbox').forEach(function(time){
 function BtnClick(){
     document.getElementById('btn').addEventListener('click', function(){
     console.log(booktime)})
-    alert("Bokning Sparad");
-    window.location.replace("index.html");
+    document.getElementById("bookingdate").value=booktime.date;
+    document.getElementById("bookingtime").value=booktime.time; 
 }

@@ -1,3 +1,8 @@
+<?php
+var_dump($_POST);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,7 +82,7 @@
             <div class="day">lör</div>
             <div class="day">sön</div>
         </div>
-        <div class="dates" id="dates"></div>
+        <select class="dates" id="dates"></select>
       </div>
       
       <!--ändra namn till rätt sak så man vet vad det hör till!-->
@@ -85,9 +90,20 @@
         <ul id="HJ" class="G"style="width: 100%">
         </ul>
       </div>
-      <button id="btn" type="button" onclick="BtnClick()" class="btn btn-success" >Boka</button>
+      <?php if(!isset($_SESSION['username'])): ?>
+      <form action="bokning_sida.php" method="post">
+        <input type="hidden" name="date" id="bookingdate">
+        <input type="hidden" name="time" id="bookingtime">
+      <button id="btn" type="Submit" onclick="BtnClick()" class="btn btn-success">Boka</button>
+      </form>
+      <?php endif; ?>
+      
       </div>
-</body>
+   
+      
+      </body>
+
+
 <script src="../scripts/bokning_sida.js"></script>
 <script src="../scripts/sidomeny.js"></script>
  
