@@ -1,8 +1,83 @@
 <?php
 require '../db/dbconn.php';
 
+$supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtdWFlanl6b2ZjbGNzeG1pbGhyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNTI4MzIzOCwiZXhwIjoyMDQwODU5MjM4fQ.gO6JV_lsqSsu7GcPKCBXpkD5v_RPj9pxZto2JTm6u8M';
+
 $supabaseUrl = 'https://emuaejyzofclcsxmilhr.supabase.co'; // Replace with your Supabase project URL
 $bucketName = 'kastmyrensBilder'; // Your Supabase bucket name
+
+
+if (isset($_POST['createProduct'])) {
+    
+  $pictures = "";
+    
+  $files = $_FILES['images'];
+  $end = end($files['name']);
+
+    // Loop through each file and upload
+    foreach ($files['name'] as $key => $name) {
+        $fileTmpName = $files['tmp_name'][$key];
+        $fileType = $files['type'][$key];
+
+        // Open the file in binary mode
+        $fileData = file_get_contents($fileTmpName);
+
+        // File path in the bucket (you can modify the path as needed)
+        $filePath = "webbshop/" . $name;
+        
+        if ($end != $name) 
+            $pictures = $pictures . $name . ",";
+        else
+            $pictures = $pictures . $name;
+
+        // cURL setup to send the file to Supabase storage
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "$supabaseUrl/storage/v1/object/$bucketName/$filePath",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $supabaseKey,
+                'Content-Type: ' . $fileType
+            ],
+            CURLOPT_POSTFIELDS => $fileData,
+        ]);
+
+        $response = curl_exec($curl);
+        $error = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($error) {
+            echo "cURL Error #:" . $error . "<br>";
+        }
+    }    
+    
+    
+    
+
+  $name = htmlspecialchars($_POST['name']);
+  $price = htmlspecialchars($_POST['price']);
+  $description = htmlspecialchars($_POST['desc']);
+  
+
+  
+  $createStmt = $pdo->prepare('INSERT INTO products (name, price, description, imageurls) VALUES (:name, :price, :description, :pictures)');
+    
+  $createStmt->bindParam(':name', $name, PDO::PARAM_STR);
+  $createStmt->bindParam(':price', $price, PDO::PARAM_STR);
+  $createStmt->bindParam(':description', $description, PDO::PARAM_STR);
+  $createStmt->bindParam(':pictures', $pictures, PDO::PARAM_STR);
+  $createStmt->execute();
+    
+
+  
+    
+    
+    
+
+}
 
 
 $query = 'SELECT * FROM products';
@@ -79,6 +154,28 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
       <div class="p-5 shop_img w-100 position-absolute"></div>
       <div class="w-75 p-3 border border-black rounded m-auto mb-5 bg-white filter_box" >
+    <?php  
+        if (isset($_SESSION['admin'])): ?>
+                  <form method="post" class="m-auto flex-column w-75" enctype="multipart/form-data">
+                    <div class="mb-3 w-75 m-auto">
+                    <input class="w-100 me-3" type="text" id="" name="name" placeholder="namn">    
+                    </div>          
+
+                    <div class="mb-3 w-75 m-auto">
+                    <input class="w-100" type="number" id="price"  step="0.01" name="price" placeholder="Pris">
+                    </div>
+
+                    <div class="mb-3 w-75 m-auto">
+                    <input class="w-100" type="text" id="description" name="desc" placeholder="Beskrivning">
+                    </div>
+                      
+                    <div class="mb-3 w-75 m-auto">  
+                    <input type="file" name="images[]" multiple>
+                    </div>
+                      
+                    <input type="submit" name="createProduct" value="Lägg in produkt" class="w-100 m-auto text-center btn btn-primary">
+                  </form>
+    <?php endif;?>
 
         <h4 class="text-center text-decoration-underline m-auto">filtrera</h4>
 
