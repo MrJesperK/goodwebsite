@@ -106,7 +106,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 m-0 p-0">
     
 <ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
         <div id="main">
@@ -227,7 +227,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
 
         <button type="button" class="card p-0 col-3 ItemCard" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#item_<?php echo $row['id'] ?>_modal">
-            <img src="../images/example.jpg" class="card-img-top" alt="...">
+            <img src="<?php echo $imageUrls['0'] ?>" class="card-img-top" alt="...">
             <div class="card-body m-auto">
               <h5 class="card-title"><?php echo $row['name'] ?></h5>
               <p class="card-text">Nå toppen!</p>
@@ -237,35 +237,38 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
           
           
     
-      <div class="modal fade " id="item_<?php echo $row['id']; ?>_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade " id="item_<?php echo $row['id']; ?>_modal" tabindex="-1" aria-labelledby="exampleModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Vara #1</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel<?php echo $row['id']; ?>">Vara #1</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body row m-0 p-0">
             <div class="w-50">
                 <div class="ms-2 picture-box bg-transparent my-2">
-       <div id="carouselExampleInterval" class="carousel slide shadow" data-bs-ride="carousel">
+       <div id="carouselExampleInterval<?php echo $row['id']; ?>" class="carousel slide shadow" data-bs-ride="carousel">
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleInterval<?php echo $row['id']; ?>" data-bs-slide-to="0" aria-current="true" class="active" aria-label="Slide 1"></button>
             <?php for ($i = 1; $i != sizeof($imageUrls); $i++): ?> 
-                <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="<?php echo $i ?>" aria-label="Slide <?php echo $i ?>"></button>
+                <button type="button" data-bs-target="#carouselExampleInterval<?php echo $row['id']; ?>" data-bs-slide-to="<?php echo $i ?>" aria-label="Slide <?php echo $i ?>"></button>
             <?php endfor; ?>
           </div>
            <div class="carousel-inner">
-            <?php foreach ($imageUrls as $imageurl): ?>
-             <div class="carousel-item active">
-               <img src="<?php echo $imageurl?>" class="d-block w-100 showcase-images" alt="...">
+           <div class="carousel-item active">
+               <img src="<?php echo $imageUrls['0']?>" class="d-block w-100 showcase-images" alt="...">
              </div>
-            <?php endforeach; ?>
+            <?php for ($i = 1; $i != sizeof($imageUrls); $i++): ?>
+             <div class="carousel-item">
+               <img src="<?php echo $imageUrls[$i]?>" class="d-block w-100 showcase-images" alt="...">
+             </div>
+            <?php endfor; ?>
            </div>
-           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval<?php echo $row['id']; ?>" data-bs-slide="prev">
              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
              <span class="visually-hidden">Previous</span>
            </button>
-           <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+           <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval<?php echo $row['id']; ?>" data-bs-slide="next">
              <span class="carousel-control-next-icon" aria-hidden="true"></span>
              <span class="visually-hidden">Next</span>
            </button>
