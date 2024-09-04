@@ -32,3 +32,27 @@ let range_input = document.getElementById("lower");
     range_label.innerText = "Lägsta pris: " + range_input.value + "kr";
 }
 
+function searching(event) {
+    event.preventDefault();
+    console.log("NOT PENIS");
+    var data = new FormData(document.getElementById("searchForm"));
+    console.log("Form data:", data);
+  
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      console.log("xhr.onload function called");
+      if (xhr.status === 200) {
+        console.log(xhr.responseText);
+        document.body.innerHTML = xhr.responseText;
+      } else {
+        console.error("Request failed. Status: " + xhr.status);
+      }
+    };
+  
+    var url = window.location.href;
+    xhr.open("POST", url);
+    console.log("Sending request to:", url);
+    xhr.send(data);
+  
+    return false;
+  }

@@ -71,21 +71,29 @@ if (isset($_POST['createProduct'])) {
   $createStmt->bindParam(':pictures', $pictures, PDO::PARAM_STR);
   $createStmt->execute();
     
-
-  
-    
-    
-    
-
+  header("refresh: 0");
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search'])) {
+  $search = '%' . $_POST['search'] . '%';
+  $searchStmt = $pdo->prepare("SELECT * FROM products WHERE name LIKE :search ORDER BY id DESC");
+  $searchStmt->bindParam(':search', $search, PDO::PARAM_STR);
+  $searchStmt->execute();
+  $results = $searchStmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+  
+  $stmt = $pdo->prepare("SELECT * FROM products ORDER BY ID DESC");
 
-$query = 'SELECT * FROM products';
+  $stmt->execute();
+  $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
-$stmt = $pdo->prepare($query);
-$stmt->execute();
+// $query = 'SELECT * FROM products';
 
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// $stmt = $pdo->prepare($query);
+// $stmt->execute();
+
+// $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
@@ -180,9 +188,9 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h4 class="text-center text-decoration-underline m-auto">filtrera</h4>
 
         <div class="row flex-column gap-3" id="filters_always_shown">
-            <form>
+            <form method="post" id="searchForm" role="search" onsubmit="return searching(event)">
                 <input type="text" name="search" id="search" class="w-25" placeholder="Sök">
-                <button type="submit" class="btn btn-success">Sök</button>
+                <button type="submit" name="search" class="btn btn-success">Sök</button>
             </form>
 
             <div>
@@ -224,16 +232,58 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
      
        ?>
+
+<?php if (isset($_SESSION['admin'])): ?>
+<div class="modal fade" id="item_<?php echo $row['id'] ?>_deleteModal" tabindex="-1" aria-labelledby="item_<?php echo $row['id'] ?>_deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="item_<?php echo $row['id'] ?>_deleteModalLabel"><?php echo $row['name']?></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        DELETE THIS ITEM?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <form method="post">
+        <button name="delete_<?php echo $row['id'] ?>" type="submit" class="btn btn-danger">DELETE</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
+
+<?php
+if (isset($_POST['delete_'.$row['id']]) && $_SERVER['REQUEST_METHOD'] == "POST"){
+  $product_to_delete = $row['id'];
+
+  $deleteStmt = $pdo->prepare('DELETE FROM products where id = :id');
+  $deleteStmt->bindParam(':id', $product_to_delete);
+  $deleteStmt->execute();
+
+
+  echo "<script>
+    window.location.reload();
+</script>
+";
+}
+?>
+
     
 
-        <button type="button" class="card p-0 col-3 ItemCard" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#item_<?php echo $row['id'] ?>_modal">
+        <div type="button" class="card p-0 col-3 ItemCard" style="width: 18rem;" >
             <img src="<?php echo $imageUrls['0'] ?>" class="card-img-top" alt="...">
-            <div class="card-body m-auto">
-              <h5 class="card-title"><?php echo $row['name'] ?></h5>
-              <p class="card-text">Nå toppen!</p>
-              <div class="btn btn-primary w-100">visa</div>
+            <div class="card-body w-100 m-auto d-flex flex-column">
+              <h5 class="card-title m-auto"><?php echo $row['name'] ?></h5>
+              <p class="card-text m-auto mb-2"><?php echo $row['price']?> SEK</p>
+              <div class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#item_<?php echo $row['id'] ?>_modal">visa</div>
+              <?php if (isset($_SESSION['admin'])): ?>
+              <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#item_<?php echo $row['id'] ?>_deleteModal">DELETE</button>
+              <?php endif;?>
             </div>
-          </button>
+          </div>
           
           
     
@@ -241,7 +291,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="modal-dialog modal-fullscreen">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel<?php echo $row['id']; ?>">Vara #1</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel<?php echo $row['id']; ?>"><?php echo $row['name']; ?></h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body row m-0 p-0">
@@ -328,7 +378,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="modal-footer">
           <h3 class="me-4">
            <strong>
-            <?php echo $row['price'] ?>
+            <?php echo $row['price'] ?> SEK
            </strong>
            </h3>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stäng</button>
