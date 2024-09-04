@@ -5,7 +5,6 @@ const nextBtn = document.getElementById('nextBtn');
 const clickableDate = document.getElementById('day'); 
 const checkclick = document.getElementById('D');
 const showbuttonclick = document.getElementById('button');
-
 let currentDate = new Date();
 
 let dateclick ='';
@@ -88,5 +87,8 @@ function BtnClick(){
     document.getElementById('btn').addEventListener('click', function(){
     console.log(booktime)})
     document.getElementById("bookingdate").value=booktime.date;
-    document.getElementById("bookingtime").value=booktime.time; 
+    document.getElementById("bookingtime").value=booktime.time;
+    
 }
+
+
