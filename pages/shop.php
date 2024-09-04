@@ -164,7 +164,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search'])) {
       <div class="w-75 p-3 border border-black rounded m-auto mb-5 bg-white filter_box" >
     <?php  
         if (isset($_SESSION['admin'])): ?>
-                  <form method="post" class="m-auto flex-column w-75" enctype="multipart/form-data">
+                
+                  <form method="post" class="m-auto flex-column w-75 d-flex" enctype="multipart/form-data">
+                    <h1 class="mb-3 w-75 m-auto text-center" style="">Lägg till produkt</h1>
                     <div class="mb-3 w-75 m-auto">
                     <input class="w-100 me-3" type="text" id="" name="name" placeholder="namn">    
                     </div>          
@@ -181,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search'])) {
                     <input type="file" name="images[]" multiple>
                     </div>
                       
-                    <input type="submit" name="createProduct" value="Lägg in produkt" class="w-100 m-auto text-center btn btn-primary">
+                    <input type="submit" name="createProduct" value="Lägg till produkt" class="mb-3 w-50 m-auto text-center btn btn-primary">
                   </form>
     <?php endif;?>
 
