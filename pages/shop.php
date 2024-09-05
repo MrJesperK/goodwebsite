@@ -6,6 +6,11 @@ $supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 $supabaseUrl = 'https://emuaejyzofclcsxmilhr.supabase.co'; // Replace with your Supabase project URL
 $bucketName = 'kastmyrensBilder'; // Your Supabase bucket name
 
+if (isset($_POST['logout'])) {
+  session_destroy();
+  header('Location: index.php');
+  exit();
+  }
 
 if (isset($_POST['createProduct'])) {
     
@@ -117,6 +122,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search'])) {
 <body class="d-flex flex-column min-vh-100 m-0 p-0">
     
 <ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
+
+    <?php if (isset($_SESSION['username'])): ?>
+    <li class="nav-item">
+      <a href="user.php" class="nav-link" style="color:black; font-size: 20px;">Mina sidor</a>
+    </li>
+    <?php endif; ?>
+
         <div id="main">
           <span class="hamburg" onclick="openNav()">&#9776;</span>
         </div>
@@ -140,9 +152,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search'])) {
       <li class="nav-item">
         <a class="nav-link" style="color:black; font-size: 20px;"  href="bokning_sida.php">Bokning</a>
       </li>     
+      <?php if (!isset($_SESSION['username'])):?>
       <li class="nav-item">
         <a class="nav-link" style="color:black; font-size: 20px;"  href="login.php">Logga in</a>
       </li> 
+      <?php endif;?>
+      <?php if (isset($_SESSION['username'])):?>
+      <li class="nav-item">
+        <form method="post">
+        <button type="submit" name="logout" class="nav-link" style="color:black; font-size: 20px;">Logga ut</button>
+        </form>
+      </li> 
+      <?php endif;?>
 </ul>
       <div class="container">
 
@@ -166,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search'])) {
         if (isset($_SESSION['admin'])): ?>
                 
                   <form method="post" class="m-auto flex-column w-75 d-flex" enctype="multipart/form-data">
-                    <h1 class="mb-3 w-75 m-auto text-center" style="">Lägg till produkt</h1>
+                    <h1 class="mb-3 w-75 m-auto text-center">Lägg till produkt</h1>
                     <div class="mb-3 w-75 m-auto">
                     <input class="w-100 me-3" type="text" id="" name="name" placeholder="namn">    
                     </div>          

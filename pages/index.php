@@ -88,7 +88,7 @@ exit();
 </ul>
 <br>
 <div class="container-fluid w-25 h-auto m-auto p-4 border border-black welcome-div font-welcome rounded">
-<h1 class="text-center m-auto text-decoration-underline">Kastmyrens diskare</h1>
+<h1 class="text-center m-auto">Kastmyrens diskare</h1>
 <h4 class="text-center m-auto ">Sveriges bästa diskgolfarklubb</h4>
 </div>
 
@@ -129,16 +129,16 @@ exit();
    </div>
     <!--w-25-->
    <div class="m-auto mb-5 p-3 font-intro text-box">
-    <h2 class="text-center text-decoration-underline">Välkommen!</h2>
+    <h2 class="text-center">Välkommen!</h2>
     <hr>
     <p class="fs-5">
         Välkommen till kastmyrens diskare! Din plats för att njuta och ha kul med familjen.
         <br>
         vi erbjuder en diskgolfbana som aldrig förr, med x-antal hål att klara av och tävla mot varandra.
         <br>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque ratione doloremque necessitatibus possimus. Sint laboriosam fugit, commodi consequatur facilis, soluta nostrum rem explicabo distinctio at ipsa cum, voluptates nihil optio!
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos adipisci veniam earum reprehenderit quis animi laboriosam recusandae porro? Vitae exercitationem a libero sint ipsa quisquam quas illum tempore in accusamus.
     </p>
-    <button class="btn float-end welcome-button border border-black" style="background-color: #A9B388;"><a href="bokning_sida.html" class="text-black text-decoration-none">Boka tid nu!</a></button>
+    <button class="btn float-end welcome-button border border-black" style="background-color: #A9B388;"><a href="bokning_sida.php" class="text-black text-decoration-none">Boka tid nu!</a></button>
   </div>
 </div>
 </body>
