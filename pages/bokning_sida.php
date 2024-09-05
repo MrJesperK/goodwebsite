@@ -1,5 +1,7 @@
 <?php
-var_dump($_POST);
+require '../db/dbconn.php';
+$DT = $_POST;
+var_dump($DT);
 
 ?>
 
@@ -90,13 +92,12 @@ var_dump($_POST);
         <ul id="HJ" class="G"style="width: 100%">
         </ul>
       </div>
-      <?php if(!isset($_SESSION['username'])): ?>
       <form action="bokning_sida.php" method="post">
-        <input type="hidden" name="date" id="bookingdate">
-        <input type="hidden" name="time" id="bookingtime">
-      <button id="btn" type="Submit" onclick="BtnClick()" class="btn btn-success">Boka</button>
+        <input type="hidden" name="date[]" id="bookingdate">
+        <input type="hidden" name="time[]" id="bookingtime">
+      <button id="btn" type="submit" onclick="BtnClick()" class="btn btn-success">Boka</button>
       </form>
-      <?php endif; ?>
+      
       
       </div>
    
