@@ -134,9 +134,8 @@ exit();
     <p class="fs-5">
         Välkommen till kastmyrens diskare! Din plats för att njuta och ha kul med familjen.
         <br>
-        vi erbjuder en diskgolfbana som aldrig förr, med x-antal hål att klara av och tävla mot varandra.
+        Upplev spänningen med frisbeegolf på en av Sveriges bästa banor! Hos Kastmyrens Diskare erbjuder vi en unik kombination av naturupplevelser och sportig utmaning för spelare på alla nivåer. Oavsett om du är nybörjare eller en erfaren spelare, hittar du hos oss en gemenskap som brinner för frisbeegolf.
         <br>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos adipisci veniam earum reprehenderit quis animi laboriosam recusandae porro? Vitae exercitationem a libero sint ipsa quisquam quas illum tempore in accusamus.
     </p>
     <button class="btn float-end welcome-button border border-black" style="background-color: #A9B388;"><a href="bokning_sida.php" class="text-black text-decoration-none">Boka tid nu!</a></button>
   </div>
