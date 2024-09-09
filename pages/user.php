@@ -7,13 +7,14 @@ if (isset($_POST['logout'])) {
     exit();
 }
     
-//$stmt = $pdo->prepare("SELECT * FROM carts WHERE user_id = :id ORDER BY created_at");
-$stmt = $pdo->prepare("SELECT * FROM products ORDER BY id");
+$stmt = $pdo->prepare("SELECT * FROM carts WHERE user_id = :id ORDER BY created_at");
+//$stmt = $pdo->prepare("SELECT * FROM products ORDER BY id");
 
-//$stmt->bindParam(':id', $_SESSION['id'], PDO::PARAM_INT);
+$stmt->bindParam(':id', $_SESSION['userID'], PDO::PARAM_INT);
 
 $stmt->execute();
 $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 
 ?>
@@ -188,9 +189,9 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </thead>    
                         <?php foreach ($results_orders as $order): ?>
                             <tr index="<?php $order['id'] ?>">
-                                <td><?php echo $order['name'] ?></td>
-                                <td><?php echo $order['price'] ?> SEK</td>
-                                <td><?php echo $order['description'] ?></td>
+                                <td><?php echo $order['product_id'] ?></td>
+                                <td><?php echo $order['product_price'] ?> SEK</td>
+                                <td><?php echo $order['amount'] ?></td>
                             </tr>  
                         <?php endforeach; ?>
                     </table>
@@ -207,9 +208,9 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </thead>    
                         <?php foreach ($results_orders as $order): ?>
                             <tr index="<?php $order['id'] ?>">
-                                <td><?php echo $order['name'] ?></td>
-                                <td><?php echo $order['price'] ?> SEK</td>
-                                <td><?php echo $order['description'] ?> SEK</td>
+                                <td><?php echo $order['product_id'] ?></td>
+                                <td><?php echo $order['product_price'] ?> SEK</td>
+                                <td><?php echo $order['amount'] ?> SEK</td>
                             </tr>  
                         <?php endforeach; ?>
                     </table>
