@@ -7,13 +7,14 @@ if (isset($_POST['logout'])) {
     exit();
 }
     
-//$stmt = $pdo->prepare("SELECT * FROM carts WHERE user_id = :id ORDER BY created_at");
-$stmt = $pdo->prepare("SELECT * FROM products ORDER BY id");
+$stmt = $pdo->prepare("SELECT * FROM carts WHERE user_id = :id ORDER BY created_at");
+//$stmt = $pdo->prepare("SELECT * FROM products ORDER BY id");
 
-//$stmt->bindParam(':id', $_SESSION['id'], PDO::PARAM_INT);
+$stmt->bindParam(':id', $_SESSION['userID'], PDO::PARAM_INT);
 
 $stmt->execute();
 $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 
 ?>
@@ -37,7 +38,7 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         @media (max-width: 1100px) {
             .m{
-                /*justify-content: center !IMPORTANT;*/
+                justify-self: center !IMPORTANT;
                 text-align: center;
                 flex-direction: column;
                 margin: 0vh !IMPORTANT;
@@ -48,6 +49,10 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 border-right: 4px solid black;
                 border-radius: 15px 15px 0 0 !IMPORTANT;
                 width: 100vw !IMPORTANT;
+            }
+            
+            .l{
+              margin: auto;
             }
             
             .bordered-div{
@@ -113,11 +118,16 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .modern-table tbody tr:last-child {
             border-bottom: none; /* Remove border from the last row */
         }
+        
+        .l{
+               min-width: 33vh; 
+               max-width: 34vh; 
+            }
 
     </style>
 
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 font-tests">
     
 <ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
 
@@ -167,7 +177,7 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main class="">
     <h1 class="text-center mt-3"> Välkommen <?php echo $_SESSION['username']?>!</h1>
     <div class="d-flex justify-content-center m" style="margin-right: 30vh;">
-        <div class="mt-4">
+        <div class="mt-4 l">
             <div style="color: black; font-size: 20px;">Namn: <?php echo $_SESSION['username']; ?></div>
             <div style="color: black; font-size: 20px;">Email: <?php echo $_SESSION['email']; ?></div>
             <?php if (isset($_SESSION['admin'])): ?>
@@ -188,9 +198,9 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </thead>    
                         <?php foreach ($results_orders as $order): ?>
                             <tr index="<?php $order['id'] ?>">
-                                <td><?php echo $order['name'] ?></td>
-                                <td><?php echo $order['price'] ?> SEK</td>
-                                <td><?php echo $order['description'] ?></td>
+                                <td><?php echo $order['product_id'] ?></td>
+                                <td><?php echo $order['product_price'] ?> SEK</td>
+                                <td><?php echo $order['amount'] ?></td>
                             </tr>  
                         <?php endforeach; ?>
                     </table>
@@ -207,9 +217,9 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </thead>    
                         <?php foreach ($results_orders as $order): ?>
                             <tr index="<?php $order['id'] ?>">
-                                <td><?php echo $order['name'] ?></td>
-                                <td><?php echo $order['price'] ?> SEK</td>
-                                <td><?php echo $order['description'] ?> SEK</td>
+                                <td><?php echo $order['product_id'] ?></td>
+                                <td><?php echo $order['product_price'] ?> SEK</td>
+                                <td><?php echo $order['amount'] ?> SEK</td>
                             </tr>  
                         <?php endforeach; ?>
                     </table>
