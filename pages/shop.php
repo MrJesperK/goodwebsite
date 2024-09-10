@@ -118,7 +118,8 @@ if (isset($_SESSION['userID'])) {
   <link rel="stylesheet" href="../styles/shop.css">
   <link rel="stylesheet" href="../styles/footer.css">
   <link rel="stylesheet" href="../styles/sidomeny.css">
-
+  <script src="../scripts/shop.js" defer></script>
+  <script src="../scripts/sidomeny.js" defer></script>
 
 </head>
 
@@ -269,18 +270,11 @@ if (isset($_SESSION['userID'])) {
         return "$supabaseUrl/storage/v1/object/public/$bucketName/webbshop/$imageName";
       }, $imageNames);
 
-      // if (isset($_POST["addToCart"]) && $_SERVER['REQUEST_METHOD'] === "Post") {
-    
-      //   $itemToAdd = $row['id'];
-      //   $
-    
-      //   }
-    
       $revFetch = $pdo->prepare("SELECT * FROM reviews WHERE product_id = :id ORDER BY id DESC");
       $revFetch->bindParam(":id", $row['id'], PDO::PARAM_INT);
       $revFetch->execute();
 
-      $reviews = $revFetch->fetch(PDO::FETCH_ASSOC);
+      $reviews = $revFetch->fetchAll(PDO::FETCH_ASSOC);
 
       ?>
 
@@ -406,21 +400,47 @@ if (isset($_SESSION['userID'])) {
                   <h3 class="text-decoration-underline text-center">Recensioner</h3>
 
                   <form class="w-100 row justify-content-center" method="post" id="revForm_<?php echo $row['id'] ?>"
-                    onsubmit="return review(event, <?php echo $row['id'] ?>)">
-                    <input type="text" name="review" id="review" class="rounded w-50 me-2"
+                    onsubmit="return reviewItem(event, <?php echo $row['id'] ?>)">
+                    <input type="text" name="review" id="revText_<?php echo $row['id'] ?>" class="rounded w-50 me-2"
                       placeholder="Skriv en recension">
-                    <button type="submit" class="btn btn-primary w-25">Skicka!</button>
+                    <button class="btn btn-primary w-25">Skicka!</button>
                   </form>
 
                   <hr>
 
-                  <div id="reviews">
+                  <div id="reviews_<?php echo $row['id'] ?>" class="overflow-y-scroll" style="max-height:20rem;">
                     <?php if (!empty($reviews)): ?>
-                      <?php foreach ($reviews as $review): ?>
+                      <?php foreach ($reviews as $review):
 
-                        <div><?php echo $review['id'] ?></div>
-                        <br>
-                        <?php print_r($reviews) ?>
+                        if (isset($_POST['delete_' . $review['id']]) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                          $revToDel = $review['id'];
+                          $deleteRevStmt = $pdo->prepare("DELETE FROM reviews WHERE id = :id");
+                          $deleteRevStmt->bindParam(":id", $revToDel, PDO::PARAM_INT);
+                          $deleteRevStmt->execute();
+
+                          echo "<script>
+    window.location.reload();
+</script>
+";
+                        }
+                        ?>
+
+                        <div class="card w-75 m-auto mb-2" style="width: 18rem;">
+                          <div class="card-header">
+                            <?php echo $review['username'] ?>
+                            <span class="float-end"><?php echo $review['created_at'] ?></span>
+                          </div>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><?php echo $review['text'] ?>
+                              <?php if (isset($_SESSION['admin'])): ?>
+                                <form method="post">
+                                    <button name="delete_<?php echo $review['id'] ?>" type="submit"
+                                      class="btn btn-danger" data-bs-dismiss="modal">DELETE</button>
+                                  </form>
+                              <?php endif; ?>
+                            </li>
+                          </ul>
+                        </div>
 
                       <?php endforeach; ?>
                     <?php else: ?>
@@ -448,8 +468,7 @@ if (isset($_SESSION['userID'])) {
 
       </div>
     <?php endforeach; ?>
-    <script src="../scripts/shop.js"></script>
-    <script src="../scripts/sidomeny.js"></script>
+
 </body>
 
 <footer class="footer mt-auto">

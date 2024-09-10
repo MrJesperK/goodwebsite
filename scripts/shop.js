@@ -85,7 +85,7 @@ function searching(event) {
     const url = "../db/addToCart.php";
 
     xhr.open("POST", url);
-    xhr.response = 'text';
+    xhr.responseType = 'text';
 
     xhr.onreadystatechange = function() {
       if (xhr.readyState === XMLHttpRequest.DONE){
@@ -110,11 +110,11 @@ function searching(event) {
     return false;
   }
 
-  function review(event, item_id){
+  function reviewItem(event, item_id){
     event.preventDefault();
     let reviewForm = document.getElementById('revForm_'+item_id);
-    let revList = document.getElementById('reviews');
-    let revText = document.getElementById('revText').value;
+    let revList = document.getElementById('reviews_'+item_id);
+    let revText = document.getElementById('revText_'+item_id).value;
 
     const req = {
       id: item_id,
@@ -125,13 +125,14 @@ function searching(event) {
     const url = "../db/reviews.php";
 
     xhr.open("POST", url);
-    xhr.response = 'text';
+    xhr.responseType = 'text';
+    xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onreadystatechange = function() {
       if (xhr.readyState === XMLHttpRequest.DONE){
         if (xhr.status === 200){
           console.log(xhr.response);
-          cartList.insertAdjacentHTML("afterbegin", xhr.response);
+          revList.insertAdjacentHTML("afterbegin", xhr.response);
         } else {
           console.log(xhr.status, xhr.statusText, xhr.responseText);
         }
