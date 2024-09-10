@@ -38,7 +38,7 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         @media (max-width: 1100px) {
             .m{
-                /*justify-content: center !IMPORTANT;*/
+                justify-self: center !IMPORTANT;
                 text-align: center;
                 flex-direction: column;
                 margin: 0vh !IMPORTANT;
@@ -49,6 +49,10 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 border-right: 4px solid black;
                 border-radius: 15px 15px 0 0 !IMPORTANT;
                 width: 100vw !IMPORTANT;
+            }
+            
+            .l{
+              margin: auto;
             }
             
             .bordered-div{
@@ -114,11 +118,16 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .modern-table tbody tr:last-child {
             border-bottom: none; /* Remove border from the last row */
         }
+        
+        .l{
+               min-width: 33vh; 
+               max-width: 34vh; 
+            }
 
     </style>
 
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 font-tests">
     
 <ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
 
@@ -168,7 +177,7 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main class="">
     <h1 class="text-center mt-3"> Välkommen <?php echo $_SESSION['username']?>!</h1>
     <div class="d-flex justify-content-center m" style="margin-right: 30vh;">
-        <div class="mt-4">
+        <div class="mt-4 l">
             <div style="color: black; font-size: 20px;">Namn: <?php echo $_SESSION['username']; ?></div>
             <div style="color: black; font-size: 20px;">Email: <?php echo $_SESSION['email']; ?></div>
             <?php if (isset($_SESSION['admin'])): ?>
