@@ -56,3 +56,96 @@ function searching(event) {
   
     return false;
   }
+
+  function clearFormInputs(form) {
+    form.reset();
+  }
+  
+  function disableSubmitButton(form) {
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+  }
+  
+  function enableSubmitButton(form) {
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = false;
+  }
+
+  function cartStuff(event, item){
+    event.preventDefault();
+    let cartForm = document.getElementById('cartForm_'+item);
+    let itemToAdd = document.getElementById('item_'+item);
+    let cartList = document.getElementById('cart');
+
+    const request = {
+      id: item,
+    };
+
+    const xhr = new XMLHttpRequest();
+    const url = "../db/addToCart.php";
+
+    xhr.open("POST", url);
+    xhr.response = 'text';
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE){
+        if (xhr.status === 200){
+          console.log(xhr.response);
+          cartList.insertAdjacentHTML("afterbegin", xhr.response);
+        } else {
+          console.log(xhr.status, xhr.statusText, xhr.responseText);
+        }
+
+        clearFormInputs(cartForm);
+        enableSubmitButton(cartForm);
+      }
+    };
+
+    try {
+      xhr.send(JSON.stringify(request));
+    } catch(e) {
+      console.log(e);
+    }
+
+    return false;
+  }
+
+  function review(event, item_id){
+    event.preventDefault();
+    let reviewForm = document.getElementById('revForm_'+item_id);
+    let revList = document.getElementById('reviews');
+    let revText = document.getElementById('revText').value;
+
+    const req = {
+      id: item_id,
+      text: revText
+    };
+
+    const xhr = new XMLHttpRequest();
+    const url = "../db/reviews.php";
+
+    xhr.open("POST", url);
+    xhr.response = 'text';
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE){
+        if (xhr.status === 200){
+          console.log(xhr.response);
+          cartList.insertAdjacentHTML("afterbegin", xhr.response);
+        } else {
+          console.log(xhr.status, xhr.statusText, xhr.responseText);
+        }
+
+        clearFormInputs(reviewForm);
+        enableSubmitButton(reviewForm);
+      }
+    };
+
+    try {
+      xhr.send(JSON.stringify(req));
+    } catch(e) {
+      console.log(e);
+    }
+
+    return false;
+  }
