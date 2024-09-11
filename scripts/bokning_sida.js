@@ -89,6 +89,8 @@ function BtnClick(){
     document.getElementById("bookingdate").value=booktime.date;
     document.getElementById("bookingtime").value=booktime.time;
     
+    
+    
 }
 
 
