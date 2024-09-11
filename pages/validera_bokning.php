@@ -70,7 +70,6 @@ try{
     $inserStmt->bindParam(':People', $players, PDO::PARAM_INT);
     $inserStmt->execute();
 
-    header("location:index.php");
 
    
     } catch(PDOException $e) {
