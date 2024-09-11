@@ -49,7 +49,15 @@ if (isset($_POST['logout'])) {
             margin-bottom: 10px; 
           }
             
-          #map {height: 500px; }
+          #map {height: 400px; }
+        
+            .table-list{
+            overflow-y: auto;
+            max-height: 30vh !important;
+            margin: 0px;
+            
+            
+        }
         }
 
         .box {
@@ -245,7 +253,8 @@ if (isset($_POST['logout'])) {
     </footer>
     
 <script>
-    
+
+
 var latlngs = [
     [[60.671784226286235, 17.1103799942964], [60.67118599027206, 17.111615157929396]],
     [[60.67145397972065, 17.112413731276625],[60.67204544350032, 17.11033025615419]],
@@ -326,7 +335,6 @@ function highlightRow(rowId) {
         var row = document.getElementById(rowId);
         row.classList.add('highlight');
         row.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
-    
         setTimeout(function() {
             row.classList.remove('highlight');
         }, 1500);
