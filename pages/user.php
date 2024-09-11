@@ -7,13 +7,22 @@ if (isset($_POST['logout'])) {
     exit();
 }
     
-$stmt = $pdo->prepare("SELECT * FROM carts WHERE user_id = :id ORDER BY created_at");
+$stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = :id ORDER BY order_id");
 //$stmt = $pdo->prepare("SELECT * FROM products ORDER BY id");
 
 $stmt->bindParam(':id', $_SESSION['userID'], PDO::PARAM_INT);
 
 $stmt->execute();
 $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$stmt = $pdo->prepare("SELECT * FROM bokningar WHERE user_id = :id ORDER BY datum_");
+//$stmt = $pdo->prepare("SELECT * FROM products ORDER BY id");
+
+$stmt->bindParam(':id', $_SESSION['userID'], PDO::PARAM_INT);
+
+$stmt->execute();
+$results_bokningar = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 
 
@@ -251,18 +260,22 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <th>Produkt</th>
                     <th>Pris</th>
                     <th>Antal</th>
+                    <th>Order</th>
                 </thead>
                 </table> 
             <div class="mh-50 w-100"> 
                 <div class="j">
-                <table class="modern-table content-table">   
+                <table class="modern-table content-table">
+                    <?php if(isset($results_orders)):?>
                         <?php foreach ($results_orders as $order): ?>
                             <tr index="<?php $order['id'] ?>">
-                                <td><?php echo $order['product_id'] ?></td>
-                                <td><?php echo $order['product_price'] ?> SEK</td>
-                                <td><?php echo $order['amount'] ?></td>
+                                <td><?php echo $order['item_id'] ?></td>
+                                <td><?php echo $order['total_price'] ?> SEK</td>
+                                <td><?php echo $order['item_amount'] ?></td>
+                                <td><?php echo $order['order_id'] ?></td>
                             </tr>  
                         <?php endforeach; ?>
+                    <?php endif;?>
                     </table>
                     </div>
                 </div>
@@ -278,13 +291,15 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </table>
                 <div class="j">
                 <table class="modern-table content-table">
-                        <?php foreach ($results_orders as $order): ?>
+                    <?php if(isset($results_bokningar)):?>
+                        <?php foreach ($results_bokningar as $bokningar): ?>
                             <tr index="<?php $order['id'] ?>">
-                                <td><?php echo $order['product_id'] ?></td>
-                                <td><?php echo $order['product_price'] ?> SEK</td>
-                                <td><?php echo $order['amount'] ?> SEK</td>
+                                <td><?php echo $bokningar['datum_'] ?></td>
+                                <td><?php echo $bokningar['tid_'] ?></td>
+                                <td><?php echo $bokningar['people'] ?></td>
                             </tr>  
                         <?php endforeach; ?>
+                    <?php endif;?>
                     </table>
                     </div>
                 </div>
