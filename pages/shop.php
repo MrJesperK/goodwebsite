@@ -115,6 +115,16 @@ if (isset($_POST['updateCart'])) {
 
 if (isset($_POST['checkout'])) {
   $user_id = $_SESSION['userID'];
+
+  $checkOrderIdStmt = $pdo->prepare('SELECT order_id FROM orders ORDER BY id DESC LIMIT 1');
+  $checkOrderIdStmt->execute();
+
+  $orderExists = $checkOrderIdStmt->fetch(PDO::FETCH_ASSOC);
+
+  if ($orderExists){
+    $order_id = $orderExists['order_id'] + 1;
+  }
+
   foreach ($cartItems as $item) {
     $product_id = $item['product_id'];
     $quantity = $item['amount']; 
@@ -129,17 +139,20 @@ if (isset($_POST['checkout'])) {
 
  
 
-  $insertOrderStmt = $pdo->prepare('INSERT INTO orders (created_at, user_id, total_price, item_amount, item_id) VALUES (now(), :user, :price, :amount, :item)');
+  $insertOrderStmt = $pdo->prepare('INSERT INTO orders (created_at, user_id, total_price, item_amount, item_id, order_id) VALUES (now(), :user, :price, :amount, :item, :order_id)');
   $insertOrderStmt->bindParam(':item', $product_id, PDO::PARAM_INT);  
   $insertOrderStmt->bindParam(':amount', $quantity, PDO::PARAM_INT);
   $insertOrderStmt->bindParam(':user', $user_id, PDO::PARAM_INT);
   $insertOrderStmt->bindParam(':price', $price, PDO::PARAM_INT);
+  $insertOrderStmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
   $insertOrderStmt->execute();
   }
 
   $cartDeleteStmt = $pdo->prepare('DELETE FROM carts WHERE user_id = :user');
   $cartDeleteStmt->bindParam(':user', $user_id, PDO::PARAM_INT);
   $cartDeleteStmt->execute();
+
+ header('refresh: 0');
 }
 
 ?>
