@@ -1,7 +1,5 @@
 <?php
 require '../db/dbconn.php';
-$DT = $_POST;
-var_dump($DT);
 
 if (isset($_POST['logout'])) {
   session_destroy();
@@ -9,6 +7,8 @@ if (isset($_POST['logout'])) {
   exit();
   }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -106,6 +106,8 @@ if (isset($_POST['logout'])) {
             <div class="day">sön</div>
         </div>
         <select class="dates" id="dates"></select>
+
+
       </div>
       
       <!--ändra namn till rätt sak så man vet vad det hör till!-->
@@ -113,10 +115,12 @@ if (isset($_POST['logout'])) {
         <ul id="HJ" class="G"style="width: 100%">
         </ul>
       </div>
-      <form action="bokning_sida.php" method="post">
-        <input type="hidden" name="date[]" id="bookingdate">
-        <input type="hidden" name="time[]" id="bookingtime">
-      <button id="btn" type="submit" onclick="BtnClick()" class="btn btn-success">Boka</button>
+      <form action="validera_bokning.php" method="POST">
+        <input type="hidden" name="date" id="bookingdate">
+        <input type="hidden" name="time" id="bookingtime">
+        <input type="number" name="players" id="amountplayers" placeholder="How many players? 1-8" style="display: flex; margin: auto; width:370px;" >
+
+        <button id="btn" type="submit" onclick="BtnClick()" class="btn btn-success">Boka</button>
       </form>
       
       
