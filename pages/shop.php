@@ -101,6 +101,47 @@ if (isset($_SESSION['userID'])) {
   $cartItems = $cartStmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+if (isset($_POST['updateCart'])) {
+  $product_id = $_POST['product_id'];
+  $quantity = $_POST['quantity'];
+  $user_id = $_SESSION['userID'];
+
+  $updateCartStmt = $pdo->prepare("UPDATE carts SET amount = :quantity WHERE user_id = :user_id AND product_id = :product_id");
+  $updateCartStmt->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+  $updateCartStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+  $updateCartStmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+  $updateCartStmt->execute();
+}
+
+if (isset($_POST['checkout'])) {
+  $user_id = $_SESSION['userID'];
+  foreach ($cartItems as $item) {
+    $product_id = $item['product_id'];
+    $quantity = $item['amount']; 
+ 
+
+    $fetchProdPrice = $pdo->prepare('SELECT price FROM products WHERE id = :id');
+    $fetchProdPrice->bindParam(':id', $product_id, PDO::PARAM_INT);
+    $fetchProdPrice->execute();
+    $price = $fetchProdPrice->fetch(PDO::FETCH_ASSOC);
+
+    $price = $quantity * $price['price']; 
+
+ 
+
+  $insertOrderStmt = $pdo->prepare('INSERT INTO orders (created_at, user_id, total_price, item_amount, item_id) VALUES (now(), :user, :price, :amount, :item)');
+  $insertOrderStmt->bindParam(':item', $product_id, PDO::PARAM_INT);  
+  $insertOrderStmt->bindParam(':amount', $quantity, PDO::PARAM_INT);
+  $insertOrderStmt->bindParam(':user', $user_id, PDO::PARAM_INT);
+  $insertOrderStmt->bindParam(':price', $price, PDO::PARAM_INT);
+  $insertOrderStmt->execute();
+  }
+
+  $cartDeleteStmt = $pdo->prepare('DELETE FROM carts WHERE user_id = :user');
+  $cartDeleteStmt->bindParam(':user', $user_id, PDO::PARAM_INT);
+  $cartDeleteStmt->execute();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -144,27 +185,48 @@ if (isset($_SESSION['userID'])) {
       <h2 class="text-white text-center border-bottom border-white position-relative">CART</h2>
 
       <div id="cart" class="p-2">
-        <?php foreach ($cartItems as $cartItem):
-
-          $prodID = $cartItem['product_id'];
-          $prodFetch = $pdo->prepare('SELECT * FROM products WHERE id = :id ORDER BY id DESC');
-          $prodFetch->bindParam(':id', $prodID, PDO::PARAM_INT);
-          $prodFetch->execute();
-          $prod = $prodFetch->fetch(PDO::FETCH_ASSOC);
-          ?>
-          <div class="bg-white">
+    <?php foreach ($cartItems as $cartItem):
+        $prodID = $cartItem['product_id'];
+        $prodFetch = $pdo->prepare('SELECT * FROM products WHERE id = :id');
+        $prodFetch->bindParam(':id', $prodID, PDO::PARAM_INT);
+        $prodFetch->execute();
+        $prod = $prodFetch->fetch(PDO::FETCH_ASSOC);
+        ?>
+        <div class="bg-body-transparent">
             <h3><?php echo $prod['name'] ?></h3>
-          </div>
+            <form method="post">
+            Mängd: 
+    <input class="bg-transparent border-0" type="number" name="quantity" value="<?php echo $cartItem['amount']; ?>" min="1" max="9,223,372,036,854,775,807">
+   
+    <input type="hidden" name="product_id" value="<?php echo $cartItem['product_id']; ?>">
+    <button class="btn" style="background-color:#A9B388 ;" type="submit" name="updateCart">Update Quantity</button>
+</form>
 
-        <?php endforeach; ?>
-      </div>
+            <p>Price: <?php echo $prod['price'] * $cartItem['amount']; ?> SEK</p>
+        </div>
+    <?php endforeach; ?>
+</div>
 
-      <div id="cartTotal" class="cart-total text-white p-2">
-        <strong>Total: </strong> <span id="cartTotalPrice"><?php echo "0" ?> SEK</span>
-      </div>
-      <form method="post" id="checkoutForm">
+<div id="cartTotal" class="cart-total text-white p-2">
+    <strong>Total: </strong> 
+    <span id="cartTotalPrice">
+        <?php 
+        $totalPrice = 0;
+        foreach ($cartItems as $cartItem) {
+            $prodID = $cartItem['product_id'];
+            $prodFetch = $pdo->prepare('SELECT price FROM products WHERE id = :id');
+            $prodFetch->bindParam(':id', $prodID, PDO::PARAM_INT);
+            $prodFetch->execute();
+            $prod = $prodFetch->fetch(PDO::FETCH_ASSOC);
+            $totalPrice += $prod['price'] * $cartItem['amount'];
+        }
+        echo $totalPrice . " SEK"; 
+        ?>
+    </span>
+</div>
+      <form method="post" class="m-auto" id="checkoutForm">
         <input type="hidden" name="cart" id="cartInput" value="">
-        <button type="submit" name="checkout" class="btn btn-primary w-100">Checkout</button>
+        <button type="submit" name="checkout" class="btn w-75 m-auto" style="background-color:#A9B388 ;">Checkout</button>
       </form>
     </div>
     <li class="nav-item">
@@ -197,7 +259,7 @@ if (isset($_SESSION['userID'])) {
   <div class="p-5 shop_img w-100 position-absolute"></div>
   <div class="w-75 p-3 border border-black rounded m-auto mb-5 bg-white filter_box">
     <?php
-    if (isset($_SESSION['admin'])): ?>
+    if (isset($_SESSION['admin']) && $_SESSION['admin'] == true): ?>
 
       <form method="post" class="m-auto flex-column w-75 d-flex" enctype="multipart/form-data">
         <h1 class="mb-3 w-75 m-auto text-center">Lägg till produkt</h1>
@@ -278,7 +340,7 @@ if (isset($_SESSION['userID'])) {
 
       ?>
 
-      <?php if (isset($_SESSION['admin'])): ?>
+      <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == true): ?>
         <div class="modal fade" id="item_<?php echo $row['id'] ?>_deleteModal" tabindex="-1"
           aria-labelledby="item_<?php echo $row['id'] ?>_deleteModalLabel" aria-hidden="true">
           <div class="modal-dialog">
@@ -335,7 +397,7 @@ if (isset($_SESSION['userID'])) {
               </button>
             </form>
           <?php endif; ?>
-          <?php if (isset($_SESSION['admin'])): ?>
+          <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == true): ?>
             <button class="btn btn-danger" data-bs-toggle="modal"
               data-bs-target="#item_<?php echo $row['id'] ?>_deleteModal">DELETE</button>
           <?php endif; ?>
@@ -432,7 +494,7 @@ if (isset($_SESSION['userID'])) {
                           </div>
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item"><?php echo $review['text'] ?>
-                              <?php if (isset($_SESSION['admin'])): ?>
+                              <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == true || $_SESSION['userID'] === $review['user_id']): ?>
                                 <form method="post">
                                     <button name="delete_<?php echo $review['id'] ?>" type="submit"
                                       class="btn btn-danger" data-bs-dismiss="modal">DELETE</button>
