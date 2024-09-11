@@ -49,7 +49,7 @@ if (isset($_POST['logout'])) {
             margin-bottom: 10px; 
           }
             
-          #map {height: 400px; }
+          #map {height: 500px; }
         }
 
         .box {
@@ -72,6 +72,7 @@ if (isset($_POST['logout'])) {
             /*border-radius: 10px; */
            
         }
+        
 
         th, td {
             padding: 12px;
@@ -112,8 +113,9 @@ if (isset($_POST['logout'])) {
         
         .table-list{
             overflow-y: auto;
-            max-height: 93%;
+            max-height: 80vh;
             margin: 0px;
+            
             
         }
         
@@ -222,7 +224,7 @@ if (isset($_POST['logout'])) {
                 </tr>
             </table>
             <div class="table-list">
-            <table border="1" id="myTable" >
+            <table border="1" id="myTable">
             </table>
             </div>
         </div>
