@@ -157,6 +157,31 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .j::-webkit-scrollbar-thumb:hover {
             background-color: #555; /* Color of the scrollbar thumb on hover */
         }
+        
+        .header-table {
+        border-collapse: collapse;
+        width: 100%;
+        }
+        
+        .content-table {
+        border-collapse: collapse;
+        width: 100%;
+        }
+        
+        .modern-table th, .modern-table td {
+        padding: 8px;
+        text-align: left;
+        white-space: nowrap; /* Prevents text from wrapping */
+        }
+
+        /* Ensure column widths are consistent between the header and content */
+        .header-table th, .content-table td {
+            width: 33%; /* Adjust if column widths are uneven */
+        }
+
+        
+        
+        
 
     </style>
 
@@ -221,7 +246,7 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>    
         <div class="bordered-div w-50 d-flex d flex-column" style="height: 75vh;">
             <h2>Beställningar</h2>
-            <table class="modern-table">
+            <table class="modern-table header-table">
                 <thead>
                     <th>Produkt</th>
                     <th>Pris</th>
@@ -230,7 +255,7 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </table> 
             <div class="mh-50 w-100"> 
                 <div class="j">
-                <table class="modern-table">   
+                <table class="modern-table content-table">   
                         <?php foreach ($results_orders as $order): ?>
                             <tr index="<?php $order['id'] ?>">
                                 <td><?php echo $order['product_id'] ?></td>
@@ -244,7 +269,7 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
             <div class="mh-50 w-100" style="border-top: 4px solid black; margin-top: 3vh;">
                 <h2 >Bokningar</h2>
-                <table class="modern-table">
+                <table class="modern-table header-table">
                 <thead>
                     <th>Datum</th>
                     <th>Tid</th>
@@ -252,7 +277,7 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </thead>
                 </table>
                 <div class="j">
-                <table class="modern-table">
+                <table class="modern-table content-table">
                         <?php foreach ($results_orders as $order): ?>
                             <tr index="<?php $order['id'] ?>">
                                 <td><?php echo $order['product_id'] ?></td>
