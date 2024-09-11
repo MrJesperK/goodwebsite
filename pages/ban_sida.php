@@ -1,3 +1,13 @@
+<?php 
+require '../db/dbconn.php';
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    header('Location: index.php');
+    exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,6 +50,14 @@
           }
             
           #map {height: 400px; }
+        
+            .table-list{
+            overflow-y: auto;
+            max-height: 30vh !important;
+            margin: 0px;
+            
+            
+        }
         }
 
         .box {
@@ -62,6 +80,7 @@
             /*border-radius: 10px; */
            
         }
+        
 
         th, td {
             padding: 12px;
@@ -102,8 +121,9 @@
         
         .table-list{
             overflow-y: auto;
-            max-height: 93%;
+            max-height: 80vh;
             margin: 0px;
+            
             
         }
         
@@ -156,6 +176,13 @@
     
     <!--Navbar-->
     <ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
+
+    <?php if (isset($_SESSION['username'])): ?>
+    <li class="nav-item">
+      <a href="user.php" class="nav-link" style="color:black; font-size: 20px;">Mina sidor</a>
+    </li>
+    <?php endif; ?>
+
         <div id="main">
           <span class="hamburg" onclick="openNav()">&#9776;</span>
         </div>
@@ -179,9 +206,18 @@
       <li class="nav-item">
         <a class="nav-link" style="color:black; font-size: 20px;"  href="bokning_sida.php">Bokning</a>
       </li>     
+      <?php if (!isset($_SESSION['username'])):?>
       <li class="nav-item">
         <a class="nav-link" style="color:black; font-size: 20px;"  href="login.php">Logga in</a>
       </li> 
+      <?php endif;?>
+      <?php if (isset($_SESSION['username'])):?>
+      <li class="nav-item">
+        <form method="post">
+        <button type="submit" name="logout" class="nav-link" style="color:black; font-size: 20px;">Logga ut</button>
+        </form>
+      </li> 
+      <?php endif;?>
 </ul>
     <!--Navbar-->
 
@@ -196,7 +232,7 @@
                 </tr>
             </table>
             <div class="table-list">
-            <table border="1" id="myTable" >
+            <table border="1" id="myTable">
             </table>
             </div>
         </div>
@@ -217,7 +253,8 @@
     </footer>
     
 <script>
-    
+
+
 var latlngs = [
     [[60.671784226286235, 17.1103799942964], [60.67118599027206, 17.111615157929396]],
     [[60.67145397972065, 17.112413731276625],[60.67204544350032, 17.11033025615419]],
@@ -298,7 +335,6 @@ function highlightRow(rowId) {
         var row = document.getElementById(rowId);
         row.classList.add('highlight');
         row.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
-    
         setTimeout(function() {
             row.classList.remove('highlight');
         }, 1500);

@@ -1,6 +1,11 @@
 <?php
 require '../db/dbconn.php';
 
+if (isset($_POST['logout'])) {
+  session_destroy();
+  header('Location: index.php');
+  exit();
+  }
 ?>
 
 
@@ -22,6 +27,13 @@ require '../db/dbconn.php';
 </head>
 <body class="font-tests d-flex flex-column min-vh-100">
 <ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
+
+    <?php if (isset($_SESSION['username'])): ?>
+    <li class="nav-item">
+      <a href="user.php" class="nav-link" style="color:black; font-size: 20px;">Mina sidor</a>
+    </li>
+    <?php endif; ?>
+
         <div id="main">
           <span class="hamburg" onclick="openNav()">&#9776;</span>
         </div>
@@ -45,9 +57,18 @@ require '../db/dbconn.php';
       <li class="nav-item">
         <a class="nav-link active" style="color:black; font-size: 20px;"  href="bokning_sida.php">Bokning</a>
       </li>     
+      <?php if (!isset($_SESSION['username'])):?>
       <li class="nav-item">
         <a class="nav-link" style="color:black; font-size: 20px;"  href="login.php">Logga in</a>
       </li> 
+      <?php endif;?>
+      <?php if (isset($_SESSION['username'])):?>
+      <li class="nav-item">
+        <form method="post">
+        <button type="submit" name="logout" class="nav-link" style="color:black; font-size: 20px;">Logga ut</button>
+        </form>
+      </li> 
+      <?php endif;?>
 </ul>
       <!--Hamburger meny-->
       <div id="main" style="margin-bottom: 100px;">
