@@ -60,6 +60,10 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 height: 100%;
                 margin: 0vh !IMPORTANT;
             }
+            
+            .modern-table{
+                max-width: 100%;
+            }
         }
             
         .bordered-div {
@@ -75,14 +79,22 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         .modern-table {
             width: 100%;
+            border-collapse: collapse;
+            
             max-width: 800px;
-            margin: 20px auto;
+            margin: 0px auto;
             border-collapse: separate; /* Allows rounded corners */
             border-spacing: 0; /* Ensures no spacing between cells */
             border-radius: 10px; /* Rounds the corners of the table */
-            overflow: hidden; /* Clips the rounded corners */
+            overflow: hidden; 
             background-color: white;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            
+        }
+        
+        .j{
+            max-height: 24vh;
+            overflow-y: auto;
         }
 
         .modern-table thead {
@@ -123,6 +135,28 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                min-width: 33vh; 
                max-width: 34vh; 
             }
+        
+        .j::-webkit-scrollbar {
+        width: 12px; /* Width of the scrollbar */
+        }
+
+        /* Scrollbar track */
+        .j::-webkit-scrollbar-track {
+            background: #f1f1f1; /* Background color of the scrollbar track */
+            border-radius: 10px; /* Rounded corners for the scrollbar track */
+        }
+
+        /* Scrollbar thumb */
+        .j::-webkit-scrollbar-thumb {
+            background-color: #888; /* Color of the scrollbar thumb */
+            border-radius: 10px; /* Rounded corners for the scrollbar thumb */
+            border: 2px solid #f1f1f1; /* Border around the scrollbar thumb */
+        }
+
+        /* Scrollbar thumb on hover */
+        .j::-webkit-scrollbar-thumb:hover {
+            background-color: #555; /* Color of the scrollbar thumb on hover */
+        }
 
     </style>
 
@@ -186,16 +220,17 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         </div>    
         <div class="bordered-div w-50 d-flex d flex-column" style="height: 75vh;">
-            <div class="mh-50 w-100">
-                <h2>Beställningar</h2>
-                <table class="modern-table">
+            <h2>Beställningar</h2>
+            <table class="modern-table">
                 <thead>
-                <tr>
                     <th>Produkt</th>
                     <th>Pris</th>
                     <th>Antal</th>
-                </tr>
-                </thead>    
+                </thead>
+                </table> 
+            <div class="mh-50 w-100"> 
+                <div class="j">
+                <table class="modern-table">   
                         <?php foreach ($results_orders as $order): ?>
                             <tr index="<?php $order['id'] ?>">
                                 <td><?php echo $order['product_id'] ?></td>
@@ -204,17 +239,20 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </tr>  
                         <?php endforeach; ?>
                     </table>
+                    </div>
                 </div>
-            <div class="mh-50 w-100" style="border-top: 4px solid black; margin-top: 10vh;">
+            
+            <div class="mh-50 w-100" style="border-top: 4px solid black; margin-top: 3vh;">
                 <h2 >Bokningar</h2>
-                <table class="modern-table" >
+                <table class="modern-table">
                 <thead>
-                <tr>
                     <th>Datum</th>
                     <th>Tid</th>
                     <th>Spelare</th>
-                </tr>
-                </thead>    
+                </thead>
+                </table>
+                <div class="j">
+                <table class="modern-table">
                         <?php foreach ($results_orders as $order): ?>
                             <tr index="<?php $order['id'] ?>">
                                 <td><?php echo $order['product_id'] ?></td>
@@ -223,6 +261,7 @@ $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </tr>  
                         <?php endforeach; ?>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>
