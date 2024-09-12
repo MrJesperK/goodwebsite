@@ -7,8 +7,7 @@ if (isset($_POST['logout'])) {
     exit();
 }
     
-$stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = :id ORDER BY order_id");
-//$stmt = $pdo->prepare("SELECT * FROM products ORDER BY id");
+$stmt = $pdo->prepare("SELECT order_id, SUM(total_price) as total_price, SUM(item_amount) as item_amount FROM orders WHERE user_id = :id GROUP BY order_id ORDER BY order_id");
 
 $stmt->bindParam(':id', $_SESSION['userID'], PDO::PARAM_INT);
 
@@ -24,6 +23,7 @@ $stmt->execute();
 $results_bokningar = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $totalprice = 0;
+$totalProducts = 0;
 
 
 ?>
@@ -275,10 +275,9 @@ $totalprice = 0;
             <h2>Beställningar</h2>
             <table class="modern-table header-table">
                 <thead>
-                    <th>Produkt</th>
+                    <th>Order</th>
                     <th>Pris</th>
                     <th>Antal</th>
-                    <th>Order</th>
                 </thead>
                 </table> 
             <div class="mh-50 w-100" style="min-height: 25vh;"> 
@@ -286,13 +285,15 @@ $totalprice = 0;
                 <table class="modern-table content-table">
                     <?php if(isset($results_orders)):?>
                         <?php foreach ($results_orders as $order): ?>
-                            <tr index="<?php echo $order['id']?>">
-                                <td><?php echo $order['item_id'] ?></td>
+                            
+                            <tr onclick="window.location='order.php?order=<?php echo $order['order_id'] ?>'">
+                                
+                                <td><?php echo $order['order_id'] ?></td>
                                 <td><?php echo $order['total_price'] ?> SEK</td>
                                 <td><?php echo $order['item_amount'] ?></td>
-                                <td><?php echo $order['order_id'] ?></td>
+                                
                             </tr>
-                        <?php $totalprice = $totalprice + $order['total_price'];?>
+                        <?php $totalprice = $totalprice + $order['total_price']; $totalProducts = $totalProducts + $order['item_amount']?>
                         <?php endforeach; ?>  
                     <?php endif;?>
                     </table>
@@ -302,11 +303,8 @@ $totalprice = 0;
                         <thead>
                             <th>Totalt</th>
                             <th><?php echo $totalprice ?> SEK</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th> <?php echo $totalProducts ?></th>
+                            
                         </thead>
                     </table> 
                 <?php endif; ?>  
@@ -345,11 +343,38 @@ $totalprice = 0;
                                 <td><?php echo $bokningar['tid_'] ?></td>
                                 <td><?php echo $bokningar['people'] ?></td>
                                 <td>
-                                <form method="post" index="<?php echo $bokningar['id'] ?>">
-                                 <button class="button"name="delete_<?php echo $bokningar['id'] ?>" type="submit">Avboka</button>
-                                </form>
+                                
+                                 <button class="button" data-bs-toggle="modal" data-bs-target="#cancelBooking_<?php echo $bokningar['id'] ?>">Avboka</button>
+                                
                                 </td>
                             </tr>  
+
+                            <div class="modal fade" id="cancelBooking_<?php echo $bokningar['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <h3 class="m-auto">avboka denna bokning?</h3>
+        <div class="d-flex flex-column justify-content-center m-auto">
+            <p><?php  echo $bokningar['datum_'] ?></p>
+            <p><?php  echo $bokningar['tid_'] ?></p>
+            <p><?php  echo $bokningar['people'] ?></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <form method="post" index="<?php echo $bokningar['id'] ?>">
+        <button type="submit" name="delete_<?php echo $bokningar['id'] ?>" class="btn btn-danger">Avboka</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+                          
                         <?php endforeach; ?>
                     <?php endif;?>
                     </table>
