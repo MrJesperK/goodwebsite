@@ -14,7 +14,7 @@ $stmt->bindParam(':id', $_SESSION['userID'], PDO::PARAM_INT);
 $stmt->execute();
 $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $pdo->prepare("SELECT * FROM bokningar WHERE user_id = :id ORDER BY datum_");
+$stmt = $pdo->prepare("SELECT * FROM bokningar WHERE user_id = :id ORDER BY datum_ DESC");
 //$stmt = $pdo->prepare("SELECT * FROM products ORDER BY id");
 
 $stmt->bindParam(':id', $_SESSION['userID'], PDO::PARAM_INT);
@@ -24,6 +24,8 @@ $results_bokningar = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $totalprice = 0;
 $totalProducts = 0;
+
+$currentDateTime = new DateTime();
 
 
 ?>
@@ -209,6 +211,10 @@ $totalProducts = 0;
           transform: translateY(1px); /* Slight push down on click */
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow adjustment on click */
         }
+        
+        .t{
+            background-color: lightgray;
+        }
 
     </style>
 
@@ -330,25 +336,34 @@ $totalProducts = 0;
                 <table class="modern-table content-table">
                     <?php if(isset($results_bokningar)):?>
                         <?php foreach ($results_bokningar as $bokningar): 
-                            if (isset($_POST['delete_' . $bokningar['id']]) && $_SERVER['REQUEST_METHOD'] == "POST") {
+                        if (isset($_POST['delete_' . $bokningar['id']]) && $_SERVER['REQUEST_METHOD'] == "POST") {
                     $product_to_delete = $bokningar['id'];
                     $deleteStmt = $pdo->prepare('DELETE FROM bokningar where id = :id');
                     $deleteStmt->bindParam(':id', $product_to_delete);
                     $deleteStmt->execute();
                     echo "<script> window.location.reload(); </script>";
                     }
+                    
+                        $dateTime = "{$bokningar['datum_']} {$bokningar['tid_']}:00";
+                        
+                        $givenDateTime = new DateTime($dateTime);
                         ?>
-                            <tr>
+                            <tr <?php if($givenDateTime < $currentDateTime){ 
+                                echo'class="t"';
+                                } ?>>
                                 <td><?php echo $bokningar['datum_'] ?></td>
                                 <td><?php echo $bokningar['tid_'] ?></td>
                                 <td><?php echo $bokningar['people'] ?></td>
+                                <?php if($givenDateTime > $currentDateTime):?>
                                 <td>
-                                
                                  <button class="button" data-bs-toggle="modal" data-bs-target="#cancelBooking_<?php echo $bokningar['id'] ?>">Avboka</button>
-                                
                                 </td>
+                                <?php else: ?>
+                                
+                                <td></td>
+                                
+                                <?php endif;?>
                             </tr>  
-
                             <div class="modal fade" id="cancelBooking_<?php echo $bokningar['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
