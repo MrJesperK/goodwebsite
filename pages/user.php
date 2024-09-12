@@ -23,7 +23,7 @@ $stmt->bindParam(':id', $_SESSION['userID'], PDO::PARAM_INT);
 $stmt->execute();
 $results_bokningar = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
+$totalprice = 0;
 
 
 ?>
@@ -188,10 +188,6 @@ $results_bokningar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             width: 33%; /* Adjust if column widths are uneven */
         }
 
-        
-        
-        
-
     </style>
 
 </head>
@@ -268,16 +264,25 @@ $results_bokningar = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <table class="modern-table content-table">
                     <?php if(isset($results_orders)):?>
                         <?php foreach ($results_orders as $order): ?>
-                            <tr index="<?php $order['id'] ?>">
+                            <tr index="<?php $order['id']?>">
                                 <td><?php echo $order['item_id'] ?></td>
                                 <td><?php echo $order['total_price'] ?> SEK</td>
                                 <td><?php echo $order['item_amount'] ?></td>
                                 <td><?php echo $order['order_id'] ?></td>
-                            </tr>  
-                        <?php endforeach; ?>
+                            </tr>
+                        <?php $totalprice = $totalprice + $order['total_price'];?>
+                        <?php endforeach; ?>  
                     <?php endif;?>
                     </table>
                     </div>
+                <?php if(!empty($results_orders)): ?>
+                    <table class="modern-table header-table">
+                        <thead>
+                            <th>Totalt</th>
+                            <th><?php echo $totalprice ?> SEK</th>     
+                        </thead>
+                    </table> 
+                <?php endif; ?>  
                 </div>
             
             <div class="mh-50 w-100" style="border-top: 4px solid black; margin-top: 3vh;">
