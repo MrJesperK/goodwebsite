@@ -32,8 +32,9 @@
 }
 
 .filter_box {
-    bottom: 1.5rem;
+   bottom: -1.1rem;
     position: relative;
+
 }
 body{
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif

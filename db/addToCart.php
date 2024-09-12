@@ -29,18 +29,22 @@ if ($request && isset($request['id'])) {
                 $updateCart->bindParam(":id", $itemId, PDO::PARAM_INT);
                 $updateCart->bindParam(":user_id", $userId, PDO::PARAM_INT);
                 $updateCart->execute();
+                // Update $cartItem to reflect the new amount
+                $cartItem['amount']++;
             } else {
                 // If the item is not in the cart, add it
                 $stmt = $pdo->prepare("INSERT INTO carts (product_id, user_id, created_at, amount) VALUES (:id, :user_id, now(), 1)");
                 $stmt->bindParam(":id", $itemId, PDO::PARAM_INT);
                 $stmt->bindParam(":user_id", $userId, PDO::PARAM_INT);
                 $stmt->execute();
+                // Initialize $cartItem to reflect the new amount
+                $cartItem = ['amount' => 1];
             }
 
             echo "<div class='bg-tertiary'>
-            <h3>$item[name]</h3>
-            <p>Quantity: $cartItem[amount]</p>
-            <p>Price: " . $item['price'] * $cartItem['amount'] . "SEK</p>
+            <h3>{$item['name']}</h3>
+            <p>Quantity: {$cartItem['amount']}</p>
+            <p>Price: " . ($item['price'] * $cartItem['amount']) . " SEK</p>
         </div>";
         } else {
             echo "Item not found";

@@ -65,15 +65,17 @@ if (isset($_POST['createProduct'])) {
   $name = htmlspecialchars($_POST['name']);
   $price = htmlspecialchars($_POST['price']);
   $description = htmlspecialchars($_POST['desc']);
+  $stock = htmlspecialchars($_POST['stock']);
 
 
 
-  $createStmt = $pdo->prepare('INSERT INTO products (name, price, description, imageurls) VALUES (:name, :price, :description, :pictures)');
+  $createStmt = $pdo->prepare('INSERT INTO products (name, price, description, imageurls, stock) VALUES (:name, :price, :description, :pictures, :stock)');
 
   $createStmt->bindParam(':name', $name, PDO::PARAM_STR);
   $createStmt->bindParam(':price', $price, PDO::PARAM_STR);
   $createStmt->bindParam(':description', $description, PDO::PARAM_STR);
   $createStmt->bindParam(':pictures', $pictures, PDO::PARAM_STR);
+  $createStmt->bindParam(':stock', $stock, PDO::PARAM_INT);
   $createStmt->execute();
 
   header("refresh: 0");
@@ -130,12 +132,12 @@ if (isset($_POST['checkout'])) {
     $quantity = $item['amount']; 
  
 
-    $fetchProdPrice = $pdo->prepare('SELECT price FROM products WHERE id = :id');
+    $fetchProdPrice = $pdo->prepare('SELECT price, stock FROM products WHERE id = :id');
     $fetchProdPrice->bindParam(':id', $product_id, PDO::PARAM_INT);
     $fetchProdPrice->execute();
-    $price = $fetchProdPrice->fetch(PDO::FETCH_ASSOC);
+    $priceAndStock = $fetchProdPrice->fetch(PDO::FETCH_ASSOC);
 
-    $price = $quantity * $price['price']; 
+    $price = $quantity * $priceAndStock['price']; 
 
  
 
@@ -146,6 +148,13 @@ if (isset($_POST['checkout'])) {
   $insertOrderStmt->bindParam(':price', $price, PDO::PARAM_INT);
   $insertOrderStmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
   $insertOrderStmt->execute();
+
+  $newStock = $priceAndStock['stock'] - $quantity;
+
+  $updateProductsStmt = $pdo->prepare('UPDATE products SET stock = :newStock WHERE id = :product_id');
+  $updateProductsStmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+  $updateProductsStmt->bindParam(':newStock', $newStock, PDO::PARAM_INT);
+  $updateProductsStmt->execute();
   }
 
   $cartDeleteStmt = $pdo->prepare('DELETE FROM carts WHERE user_id = :user');
@@ -155,6 +164,14 @@ if (isset($_POST['checkout'])) {
  header('refresh: 0');
 }
 
+if (isset($_POST['deleteCart'])){
+  $user_id = $_SESSION['userID'];
+  $cartDeleteStmt = $pdo->prepare('DELETE FROM carts WHERE user_id = :user');
+  $cartDeleteStmt->bindParam(':user', $user_id, PDO::PARAM_INT);
+  $cartDeleteStmt->execute();
+
+ header('refresh: 0');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -209,7 +226,7 @@ if (isset($_POST['checkout'])) {
             <h3><?php echo $prod['name'] ?></h3>
             <form method="post">
             Mängd: 
-    <input class="bg-transparent border-0" type="number" name="quantity" value="<?php echo $cartItem['amount']; ?>" min="1" max="9,223,372,036,854,775,807">
+    <input class="bg-transparent border-0" type="number" name="quantity" value="<?php echo $cartItem['amount']; ?>" min="1" max="<?php echo $prod['stock'] ?>">
    
     <input type="hidden" name="product_id" value="<?php echo $cartItem['product_id']; ?>">
     <button class="btn" style="background-color:#A9B388 ;" type="submit" name="updateCart">Update Quantity</button>
@@ -240,6 +257,10 @@ if (isset($_POST['checkout'])) {
       <form method="post" class="m-auto" id="checkoutForm">
         <input type="hidden" name="cart" id="cartInput" value="">
         <button type="submit" name="checkout" class="btn w-75 m-auto" style="background-color:#A9B388 ;">Checkout</button>
+      </form>
+
+      <form method="post" class="m-auto" id="DeleteCart">
+        <button type="submit" name="deleteCart" class="btn w-75 m-auto btn-danger">rensa varukorg</button>
       </form>
     </div>
     <li class="nav-item">
@@ -310,20 +331,20 @@ if (isset($_POST['checkout'])) {
       </form>
 
       <div>
-        <form>
-          <span class="multi-range w-25">
-            <span id="range_lowest">lägsta pris: 0kr</span>
-            <input type="range" min="0" max="50" value="0" id="lower" onchange="test()">
-
-          </span>
-        </form>
+       
       </div>
     </div>
 
     <hr>
 
     <div id="filters_hideable">
-      <span>[hideable filters here]</span>
+    <form>
+          <span class="multi-range w-25">
+            <span id="range_lowest">lägsta pris: 0kr</span>
+            <input type="range" min="0" max="50" value="0" id="lower" onchange="test()">
+
+          </span>
+        </form>
     </div>
 
     <div class="w-25 m-auto row justify-content-center">
@@ -398,28 +419,109 @@ if (isset($_POST['checkout'])) {
       <div type="button" class="card p-0 col-3 ItemCard" style="width: 18rem;" id="item_<?php echo $row['id'] ?>">
         <img src="<?php echo $imageUrls['0'] ?>" class="card-img-top" alt="...">
         <div class="card-body w-100 m-auto d-flex flex-column">
+        <span class="float-end"> I lager: <?php echo $row['stock'] ?></span>
           <h5 class="card-title m-auto"><?php echo $row['name'] ?></h5>
-          <p class="card-text m-auto mb-2"><?php echo $row['price'] ?> SEK</p>
+          <p class="card-text m-auto mb-2"><?php echo $row['price'] ?> SEK </p>
           <div class="btn btn-primary w-100 mb-2" data-bs-toggle="modal"
             data-bs-target="#item_<?php echo $row['id'] ?>_modal">visa</div>
           <?php if (isset($_SESSION['userID'])): ?>
+            <?php if ($row['stock'] > 0): ?>
             <form method="post" id="cartForm_<?php echo $row['id']; ?>"
               onsubmit="return cartStuff(event, <?php echo $row['id'] ?>)">
               <button class="btn btn-primary w-100 mb-2" id="addToCart" name="addToCart">
                 Lägg i korg
               </button>
             </form>
+            <?php endif; ?>
+            
+            <?php if ($row['stock'] <= 0): 
+              $setZeroStmt = $pdo->prepare('UPDATE products SET stock = 0 WHERE id = :prod_id');
+              $setZeroStmt->bindParam(':prod_id', $row['id'], PDO::PARAM_INT);
+              $setZeroStmt->execute();
+              ?>
+              <button class="btn btn-secondary w-100 mb-2">
+                Inte i lager
+              </button>
+            <?php endif; ?>
+
+            <?php else: ?>
+              <button class="btn btn-secondary w-100 mb-2">
+                vänligen logga in för att köpa varor
+              </button>
+            
           <?php endif; ?>
+          <?php 
+              if (isset($_POST['EditProduct_' . $row['id']]) && $_SERVER['REQUEST_METHOD'] == "POST") {
+                $newPrice = $_POST['Editprice'];
+                $newName = $_POST['Editname'];
+                $newDesc = $_POST['Editdesc'];
+                $newStock = $_POST['Editstock'];
+                $product_id = $_POST['productID'];
+  
+                $updateProductStmt = $pdo->prepare('UPDATE products SET name = :newName, price = :newPrice, description = :newDesc, stock = :newStock WHERE id = :id');
+                $updateProductStmt->bindParam(':id', $product_id, PDO::PARAM_INT);
+                $updateProductStmt->bindParam(':newName', $newName, PDO::PARAM_STR);
+                $updateProductStmt->bindParam(':newPrice', $newPrice, PDO::PARAM_STR);
+                $updateProductStmt->bindParam(':newDesc', $newDesc, PDO::PARAM_STR);
+                $updateProductStmt->bindParam(':newStock', $newStock, PDO::PARAM_INT);
+                $updateProductStmt->execute();
+              }
+              ?>
+          <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1): ?>
+           
+          <button class="btn btn-info mb-2" data-bs-toggle="modal" data-bs-target="#editModal_<?php echo $row['id'] ?>">Edit</button>
+          <?php endif; ?>
+
           <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == true): ?>
             <button class="btn btn-danger" data-bs-toggle="modal"
               data-bs-target="#item_<?php echo $row['id'] ?>_deleteModal">DELETE</button>
           <?php endif; ?>
+
         </div>
       </div>
+      
 
+      <div class="modal fade" id="editModal_<?php echo $row['id'] ?>" tabindex="-1" aria-labelledby="editModal_<?php echo $row['id'] ?>" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editModal_<?php echo $row['id'] ?>">Edit item "<?php echo $row['name'] ?>"</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <form method="post" name="editProduct" class="m-auto flex-column w-75 d-flex" enctype="multipart/form-data">
+        <h1 class="mb-3 w-75 m-auto text-center">Ändra produkt</h1>
+        <div class="mb-3 w-75 m-auto">
+          <input class="w-100 me-3" type="text" name="Editname" placeholder="namn">
+        </div>
 
+        <div class="mb-3 w-75 m-auto">
+          <input class="w-100" type="number" id="price" step="0.01" name="Editprice" placeholder="Pris">
+        </div>
 
-      <div class="modal fade " id="item_<?php echo $row['id']; ?>_modal" tabindex="-1"
+        <div class="mb-3 w-75 m-auto">
+          <input class="w-100" type="text" id="description" name="Editdesc" placeholder="Beskrivning">
+        </div>
+
+        <div class="mb-3 w-75 m-auto">
+          <input class="w-100" type="number" id="stock" name="Editstock" placeholder="stock">
+        </div>
+        <input type="hidden" name="productID" value="<?php echo $row['id'] ?>">
+
+        
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" name="EditProduct_<?php echo $row['id'] ?>" 
+          class=" text-center btn btn-primary">Ändra</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+      <div class="modal fade ms-0" id="item_<?php echo $row['id']; ?>_modal" tabindex="-1"
         aria-labelledby="exampleModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
           <div class="modal-content">
@@ -467,6 +569,11 @@ if (isset($_POST['checkout'])) {
 
               <div class="col border-start">
                 <h2 class="text-decoration-underline text-center"><?php echo $row['name'] ?></h2>
+                <h3 class="position-absolute end-0 me-2">
+                <strong>
+                 I lager:  <?php echo $row['stock'] ?>
+                </strong>
+              </h3>
                 <p class="fs-4 fw-semibold">
                   <?php echo $row['description'] ?>
                 </p>
@@ -527,13 +634,30 @@ if (isset($_POST['checkout'])) {
 
               </div>
               <div class="modal-footer">
-                <h3 class="me-4">
+                <h3 class="me-4 ">
                   <strong>
                     <?php echo $row['price'] ?> SEK
                   </strong>
                 </h3>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stäng</button>
-                <button type="button" class="btn btn-primary">Lägg till i kundvagn</button>
+                <?php if ($row['stock'] > 0): ?>
+            <form method="post" id="cartForm_<?php echo $row['id']; ?>"
+              onsubmit="return cartStuff(event, <?php echo $row['id'] ?>)">
+              <button class="btn btn-primary w-100 mb-2" id="addToCart" name="addToCart">
+                Lägg i korg
+              </button>
+            </form>
+            <?php endif; ?>
+            
+            <?php if ($row['stock'] <= 0): 
+              $setZeroStmt = $pdo->prepare('UPDATE products SET stock = 0 WHERE id = :prod_id');
+              $setZeroStmt->bindParam(':prod_id', $row['id'], PDO::PARAM_INT);
+              $setZeroStmt->execute();
+              ?>
+              <button class="btn btn-secondary w-100 mb-2">
+                Inte i lager
+              </button>
+            <?php endif; ?>
               </div>
             </div>
           </div>
