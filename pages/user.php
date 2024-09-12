@@ -350,31 +350,29 @@ $totalProducts = 0;
                             </tr>  
 
                             <div class="modal fade" id="cancelBooking_<?php echo $bokningar['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      <h3 class="m-auto">avboka denna bokning?</h3>
-        <div class="d-flex flex-column justify-content-center m-auto">
-            <p><?php  echo $bokningar['datum_'] ?></p>
-            <p><?php  echo $bokningar['tid_'] ?></p>
-            <p><?php  echo $bokningar['people'] ?></p>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <form method="post" index="<?php echo $bokningar['id'] ?>">
-        <button type="submit" name="delete_<?php echo $bokningar['id'] ?>" class="btn btn-danger">Avboka</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-                          
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Avboka denna bokning?</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                  <h3 class="m-auto"></h3>
+                                    <div class="d-flex flex-column justify-content-center m-auto">
+                                        <p>Datum: <?php  echo $bokningar['datum_'] ?></p>
+                                        <p>Tid: <?php  echo $bokningar['tid_'] ?></p>
+                                        <p>Spelare: <?php  echo $bokningar['people'] ?></p>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stäng</button>
+                                    <form method="post" index="<?php echo $bokningar['id'] ?>">
+                                    <button type="submit" name="delete_<?php echo $bokningar['id'] ?>" class="btn btn-danger">Avboka</button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                         <?php endforeach; ?>
                     <?php endif;?>
                     </table>
