@@ -41,11 +41,21 @@ if ($request && isset($request['id'])) {
                 $cartItem = ['amount' => 1];
             }
 
-            echo "<div class='bg-tertiary'>
+         
+            echo "  <div class='bg-body-transparent'>
             <h3>{$item['name']}</h3>
-            <p>Quantity: {$cartItem['amount']}</p>
-            <p>Price: " . ($item['price'] * $cartItem['amount']) . " SEK</p>
+            <form method='post'>
+            Mängd: 
+    <input class='bg-transparent border-0' type='number' name='quantity' value='{$cartItem['amount']}' min='1' max='{$item['stock']}'>
+   
+    <input type='hidden' name='product_id' value='{$cartItem['product_id']}'>
+    <button class='btn' style='background-color:#A9B388 ;' type='submit' name='updateCart'>Update Quantity</button>
+</form>
+
+            <p>Price: " . $item['price'] * $cartItem['amount'] . "SEK</p>
         </div>";
+            
+    
         } else {
             echo "Item not found";
         }

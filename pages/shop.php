@@ -222,7 +222,7 @@ if (isset($_POST['deleteCart'])){
         $prodFetch->execute();
         $prod = $prodFetch->fetch(PDO::FETCH_ASSOC);
         ?>
-        <div class="bg-body-transparent">
+        <div class="bg-body-transparent" id="<?php echo $cartItem['id'] ?>">
             <h3><?php echo $prod['name'] ?></h3>
             <form method="post">
             Mängd: 
@@ -640,7 +640,8 @@ if (isset($_POST['deleteCart'])){
                   </strong>
                 </h3>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stäng</button>
-                <?php if ($row['stock'] > 0): ?>
+                <?php if (isset($_SESSION['userID'])): ?>
+            <?php if ($row['stock'] > 0): ?>
             <form method="post" id="cartForm_<?php echo $row['id']; ?>"
               onsubmit="return cartStuff(event, <?php echo $row['id'] ?>)">
               <button class="btn btn-primary w-100 mb-2" id="addToCart" name="addToCart">
@@ -648,6 +649,23 @@ if (isset($_POST['deleteCart'])){
               </button>
             </form>
             <?php endif; ?>
+            
+            <?php if ($row['stock'] <= 0): 
+              $setZeroStmt = $pdo->prepare('UPDATE products SET stock = 0 WHERE id = :prod_id');
+              $setZeroStmt->bindParam(':prod_id', $row['id'], PDO::PARAM_INT);
+              $setZeroStmt->execute();
+              ?>
+              <button class="btn btn-secondary w-100 mb-2">
+                Inte i lager
+              </button>
+            <?php endif; ?>
+
+            <?php else: ?>
+              <button class="btn btn-secondary w-100 mb-2">
+                vänligen logga in för att köpa varor
+              </button>
+            
+          <?php endif; ?>
             
             <?php if ($row['stock'] <= 0): 
               $setZeroStmt = $pdo->prepare('UPDATE products SET stock = 0 WHERE id = :prod_id');
