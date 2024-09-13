@@ -272,7 +272,7 @@ $currentDateTime = new DateTime();
         <div class="mt-4 l">
             <div style="color: black; font-size: 20px;">Namn: <?php echo $_SESSION['username']; ?></div>
             <div style="color: black; font-size: 20px;">Email: <?php echo $_SESSION['email']; ?></div>
-            <?php if (isset($_SESSION['admin'])): ?>
+            <?php if ($_SESSION['admin'] == TRUE): ?>
                 <div style="color: black; font-size: 20px;">Admin</div>
             <?php endif;?>
 
