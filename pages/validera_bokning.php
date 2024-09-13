@@ -71,7 +71,7 @@ try{
     $inserStmt->execute();
 
 
-     echo "Bokning Avklarad";
+     header("location:user.php");
     } catch(PDOException $e) {
              echo 'Connection failed: '.$e->getMessage()."<br />";
         }
@@ -101,7 +101,7 @@ justify-content:center;
 width:300px;
 top: 120px; ">
     <h1 style="
-    font-weight:300;">Verfiera Bokning</h1>
+    font-weight:300;">Bokning</h1>
 
 </div>
 
@@ -117,7 +117,7 @@ top: 120px; ">
     position:relative; ">På den här sidan kan du antigen Ångra din bokning eller Verifiera din bokning och då kommer den tiden att låsas som upptagen. Curabitur gravida vulputate orci, id mollis enim suscipit a. Etiam sodales lacus vitae lorem tincidunt rutrum. Ut pretium turpis eu quam laoreet mollis. Integer ornare condimentum mauris ac vestibulum. Donec aliquam laoreet lorem. Etiam non eros neque. Nam scelerisque sapien at sapien tincidunt fringilla. Sed consectetur consequat ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in metus semper, ullamcorper leo in, tincidunt elit.</p>
     
 <div>
-<button onclick="window.location.href='bokning_sida.php'"
+<button onclick="window.location.href='bokning_sida.php'" class="btn btn-danger"
 style="
 display:flex;
 margin: auto; 
@@ -126,8 +126,6 @@ width:300px;
 top:100px;
 font-weight: 500;
 justify-content:center;
-
-
 ">Ångra Bokning</button>
 
 <div>
@@ -169,7 +167,7 @@ justify-content:center;
     <input type="hidden" name="date" value="<?= $dateWork?>">
     <input type="hidden" name="time" value="<?= $timeWork?>">
     <input type="hidden" name="people" value="<?= $players?>">
-<button name="SubmitButton" type="submit" 
+<button name="SubmitButton" class="btn btn-success" type="submit" 
 style="display: flex;
 margin:auto;
 width:300px;
