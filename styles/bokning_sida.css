@@ -23,6 +23,8 @@ body {
     
 }
 
+
+
 .D{
     width: 380px;
     padding: 10px;
@@ -147,14 +149,20 @@ body {
 .date:hover,
 .date:active{
     transition: 0.6s ease-in;
-    background: crimson;
+    background: blue;
     color: #fff;
 }
 
 .dateactive {
-    background-color: gray;
+    background-color: green;
+    border-radius: 30px;
+    color: whitesmoke;
 }
 
+.date.selected {
+    background-color: lightblue;
+    color: black;
+}
 
 .date.inactive {
     color: #d2d2d2;

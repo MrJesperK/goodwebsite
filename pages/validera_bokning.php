@@ -71,7 +71,7 @@ try{
     $inserStmt->execute();
 
 
-   
+     echo "Bokning Avklarad";
     } catch(PDOException $e) {
              echo 'Connection failed: '.$e->getMessage()."<br />";
         }

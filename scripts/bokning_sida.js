@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextBtn = document.getElementById('nextBtn');
     const checkclick = document.getElementById('D');
     const bookBtn = document.getElementById('btn');
-    
+
     let currentDate = new Date();
     let booktime = { date: "", time: "" };
 
@@ -18,9 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const firstDayIndex = firstDay.getDay();
         const lastDayIndex = lastDay.getDay();
         const monthYearString = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+        const today = new Date(); // Define today here
 
         monthYearEle.textContent = monthYearString;
-        
+
         let datesHTML = '';
 
         // Render previous month's inactive days
@@ -29,11 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
             datesHTML += `<div class="date inactive">${prevDate.getDate()}</div>`;
         }
 
-        // Render current month's days
         for (let i = 1; i <= totalDays; i++) {
             const date = new Date(currentYear, currentMonth, i);
-            const activeClass = date.toDateString() === new Date().toDateString() ? 'active' : '';
-            datesHTML += `<div class="date ${activeClass}" data-index="${i}">${i}</div>`;
+            const isPast = date < today; // Check if date is in the past
+            const activeClass = date.toDateString() === today.toDateString() ? 'active' : '';
+            const disabledClass = isPast ? 'disabled' : ''; // Disable past dates
+            datesHTML += `<div class="date${activeClass} ${disabledClass}" data-index="${i}">${i}</div>`;
         }
 
         // Render next month's inactive days
@@ -46,12 +48,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Event delegation to handle clicks on the dynamically created dates
         datesEle.addEventListener('click', function(e) {
-            if (e.target.classList.contains('date') && !e.target.classList.contains('inactive')) {
+            if (e.target.classList.contains('date') && !e.target.classList.contains('inactive') && !e.target.classList.contains('disabled')) {
                 document.querySelectorAll('.date').forEach(d => d.classList.remove('selected'));
                 e.target.classList.add('selected');
                 const dayIndex = e.target.getAttribute('data-index');
                 booktime.date = `${dayIndex} ${monthYearString}`;
                 console.log('Selected date:', booktime.date);
+
+                // Hide book button and reset time when date changes
+                bookBtn.style.display = "none";
+                booktime.time = "";
             }
         });
     };
@@ -93,8 +99,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.BtnClick = () => {
+        const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(booktime.date.split(" ")[0]));
+        const today = new Date();
+
+        if (selectedDate < today) {
+            alert('You cannot book in the past. Please choose a future date.');
+            return false; // Prevent form submission
+        }
+
         document.getElementById("bookingdate").value = booktime.date;
         document.getElementById("bookingtime").value = booktime.time;
         console.log('Booking confirmed:', booktime);
-    }
+        return true;
+    };
 });

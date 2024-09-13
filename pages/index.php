@@ -131,7 +131,7 @@ exit();
    <div class="m-auto mb-5 p-3 font-intro text-box">
     <h2 class="text-center">Välkommen!</h2>
     <hr>
-    <p class="fs-5">
+    <p class="fs-5" style="color:Whitesmoke;">
         Välkommen till kastmyrens diskare! Din plats för att njuta och ha kul med familjen.
         <br>
         Upplev spänningen med frisbeegolf på en av Sveriges bästa banor! Hos Kastmyrens Diskare erbjuder vi en unik kombination av naturupplevelser och sportig utmaning för spelare på alla nivåer. Oavsett om du är nybörjare eller en erfaren spelare, hittar du hos oss en gemenskap som brinner för frisbeegolf.

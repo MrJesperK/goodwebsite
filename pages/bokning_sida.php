@@ -23,15 +23,12 @@ if (isset($_POST['logout'])) {
     <link rel="stylesheet" href="../styles/index.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../scripts/bokning_sida.js"></script>
+
 </head>
 <body class="font-tests d-flex flex-column min-vh-100">
 
 <ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
-    <?php if (isset($_SESSION['username'])): ?>
-        <li class="nav-item">
-            <a href="user.php" class="nav-link" style="color:black; font-size: 20px;">Mina sidor</a>
-        </li>
-    <?php endif; ?>
 
     <li class="nav-item">
         <a class="nav-link" style="color:black; font-size: 20px;" href="index.php">Hem</a>
@@ -45,6 +42,11 @@ if (isset($_POST['logout'])) {
     <li class="nav-item">
         <a class="nav-link active" style="color:black; font-size: 20px;" href="bokning_sida.php">Bokning</a>
     </li>
+    <?php if (isset($_SESSION['username'])): ?>
+        <li class="nav-item">
+            <a href="user.php" class="nav-link" style="color:black; font-size: 20px;">Mina sidor</a>
+        </li>
+    <?php endif; ?>
     <?php if (!isset($_SESSION['username'])): ?>
         <li class="nav-item">
             <a class="nav-link" style="color:black; font-size: 20px;" href="login.php">Logga in</a>
@@ -66,10 +68,9 @@ if (isset($_POST['logout'])) {
 <!-- Side Navigation -->
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="#">About</a>
-    <a href="#">Services</a>
-    <a href="#">Clients</a>
-    <a href="#">Contact</a>
+    <a href="bokning_sida.php">Bokning</a>
+    <a href="user.php">Mina sidor</a>
+    <a href="ban_sida.php">Karta</a>
 </div>
 
 <!-- Calendar Section -->
@@ -97,12 +98,12 @@ if (isset($_POST['logout'])) {
     </div>
 
     <!-- Booking Form -->
-    <form action="validera_bokning.php" method="POST">
-        <input type="hidden" name="date" id="bookingdate">
-        <input type="hidden" name="time" id="bookingtime">
-        <input type="number" name="players" id="amountplayers" placeholder="How many players? 1-8" required min="1" max="8" style="display: flex; margin: auto; width: 370px;">
-        <button id="btn" type="submit" onclick="BtnClick()" class="btn btn-success">Boka</button>
-    </form>
+    <form action="validera_bokning.php" method="POST" onsubmit="return BtnClick();">
+    <input type="hidden" name="date" id="bookingdate">
+    <input type="hidden" name="time1" id="bookingtime">
+    <input type="number" name="players" id="amountplayers" placeholder="How many players? 1-8" required min="1" max="8" style="display:flex; margin:auto; width:340px;">
+    <button id="btn" type="submit" class="btn btn-success">Boka</button>
+</form>
 </div>
 
 <!-- Footer -->
