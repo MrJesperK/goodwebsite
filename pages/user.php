@@ -7,15 +7,14 @@ if (isset($_POST['logout'])) {
     exit();
 }
     
-$stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = :id ORDER BY order_id");
-//$stmt = $pdo->prepare("SELECT * FROM products ORDER BY id");
+$stmt = $pdo->prepare("SELECT order_id, SUM(total_price) as total_price, SUM(item_amount) as item_amount FROM orders WHERE user_id = :id GROUP BY order_id ORDER BY order_id");
 
 $stmt->bindParam(':id', $_SESSION['userID'], PDO::PARAM_INT);
 
 $stmt->execute();
 $results_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $pdo->prepare("SELECT * FROM bokningar WHERE user_id = :id ORDER BY datum_");
+$stmt = $pdo->prepare("SELECT * FROM bokningar WHERE user_id = :id ORDER BY datum_ DESC");
 //$stmt = $pdo->prepare("SELECT * FROM products ORDER BY id");
 
 $stmt->bindParam(':id', $_SESSION['userID'], PDO::PARAM_INT);
@@ -23,7 +22,10 @@ $stmt->bindParam(':id', $_SESSION['userID'], PDO::PARAM_INT);
 $stmt->execute();
 $results_bokningar = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$totalprice = 0;
+$totalProducts = 0;
 
+$currentDateTime = new DateTime();
 
 
 ?>
@@ -187,10 +189,32 @@ $results_bokningar = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .header-table th, .content-table td {
             width: 33%; /* Adjust if column widths are uneven */
         }
+        
+        .button {
+          background-color: #5F6F52; /* Green background */
+          color: white; /* White text */
+          padding: 10px 30px; /* Some padding */
+          border: none; /* Remove borders */
+          border-radius: 30px; /* Rounded corners */
+          cursor: pointer; /* Pointer/hand icon */
+          font-size: 16px; /* Increase font size */
+          transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow */
+        }
 
+        .button:hover {
+          background-color: #45a049; /* Darker green on hover */
+          transform: translateY(-2px); /* Slight lift on hover */
+        }
+
+        .button:active {
+          transform: translateY(1px); /* Slight push down on click */
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow adjustment on click */
+        }
         
-        
-        
+        .t{
+            background-color: lightgray;
+        }
 
     </style>
 
@@ -257,27 +281,39 @@ $results_bokningar = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <h2>Beställningar</h2>
             <table class="modern-table header-table">
                 <thead>
-                    <th>Produkt</th>
+                    <th>Order</th>
                     <th>Pris</th>
                     <th>Antal</th>
-                    <th>Order</th>
                 </thead>
                 </table> 
-            <div class="mh-50 w-100"> 
+            <div class="mh-50 w-100" style="min-height: 25vh;"> 
                 <div class="j">
                 <table class="modern-table content-table">
                     <?php if(isset($results_orders)):?>
                         <?php foreach ($results_orders as $order): ?>
-                            <tr index="<?php $order['id'] ?>">
-                                <td><?php echo $order['item_id'] ?></td>
+                            
+                            <tr onclick="window.location='order.php?order=<?php echo $order['order_id'] ?>'">
+                                
+                                <td><?php echo $order['order_id'] ?></td>
                                 <td><?php echo $order['total_price'] ?> SEK</td>
                                 <td><?php echo $order['item_amount'] ?></td>
-                                <td><?php echo $order['order_id'] ?></td>
-                            </tr>  
-                        <?php endforeach; ?>
+                                
+                            </tr>
+                        <?php $totalprice = $totalprice + $order['total_price']; $totalProducts = $totalProducts + $order['item_amount']?>
+                        <?php endforeach; ?>  
                     <?php endif;?>
                     </table>
                     </div>
+                <?php if(!empty($results_orders)): ?>
+                    <table class="modern-table header-table">
+                        <thead>
+                            <th>Totalt</th>
+                            <th><?php echo $totalprice ?> SEK</th>
+                            <th> <?php echo $totalProducts ?></th>
+                            
+                        </thead>
+                    </table> 
+                <?php endif; ?>  
                 </div>
             
             <div class="mh-50 w-100" style="border-top: 4px solid black; margin-top: 3vh;">
@@ -287,17 +323,71 @@ $results_bokningar = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <th>Datum</th>
                     <th>Tid</th>
                     <th>Spelare</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                 </thead>
                 </table>
                 <div class="j">
                 <table class="modern-table content-table">
                     <?php if(isset($results_bokningar)):?>
-                        <?php foreach ($results_bokningar as $bokningar): ?>
-                            <tr index="<?php $order['id'] ?>">
+                        <?php foreach ($results_bokningar as $bokningar): 
+                        if (isset($_POST['delete_' . $bokningar['id']]) && $_SERVER['REQUEST_METHOD'] == "POST") {
+                    $product_to_delete = $bokningar['id'];
+                    $deleteStmt = $pdo->prepare('DELETE FROM bokningar where id = :id');
+                    $deleteStmt->bindParam(':id', $product_to_delete);
+                    $deleteStmt->execute();
+                    echo "<script> window.location.reload(); </script>";
+                    }
+                    
+                        $dateTime = "{$bokningar['datum_']} {$bokningar['tid_']}:00";
+                        
+                        $givenDateTime = new DateTime($dateTime);
+                        ?>
+                            <tr <?php if($givenDateTime < $currentDateTime){ 
+                                echo'class="t"';
+                                } ?>>
                                 <td><?php echo $bokningar['datum_'] ?></td>
                                 <td><?php echo $bokningar['tid_'] ?></td>
                                 <td><?php echo $bokningar['people'] ?></td>
+                                <?php if($givenDateTime > $currentDateTime):?>
+                                <td>
+                                 <button class="button" data-bs-toggle="modal" data-bs-target="#cancelBooking_<?php echo $bokningar['id'] ?>">Avboka</button>
+                                </td>
+                                <?php else: ?>
+                                
+                                <td></td>
+                                
+                                <?php endif;?>
                             </tr>  
+                            <div class="modal fade" id="cancelBooking_<?php echo $bokningar['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Avboka denna bokning?</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                  <h3 class="m-auto"></h3>
+                                    <div class="d-flex flex-column justify-content-center m-auto">
+                                        <p>Datum: <?php  echo $bokningar['datum_'] ?></p>
+                                        <p>Tid: <?php  echo $bokningar['tid_'] ?></p>
+                                        <p>Spelare: <?php  echo $bokningar['people'] ?></p>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stäng</button>
+                                    <form method="post" index="<?php echo $bokningar['id'] ?>">
+                                    <button type="submit" name="delete_<?php echo $bokningar['id'] ?>" class="btn btn-danger">Avboka</button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                         <?php endforeach; ?>
                     <?php endif;?>
                     </table>
