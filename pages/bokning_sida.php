@@ -8,6 +8,14 @@ if (isset($_POST['logout'])) {
     header('Location: index.php');
     exit();
 }
+
+$bookedDates = [];
+try {
+    $stmt = $pdo->query("SELECT datum_ FROM bokningar");
+    $bookedDates = $stmt->fetchAll(PDO::FETCH_COLUMN);
+} catch (PDOException $e) {
+    echo 'Connection failed: ' . $e->getMessage();
+}
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +32,7 @@ if (isset($_POST['logout'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../scripts/bokning_sida.js"></script>
+    <script> const bookedDates = <?php echo json_encode($bookedDates); ?>;</script>
 
 </head>
 <body class="font-tests d-flex flex-column min-vh-100">
@@ -81,6 +90,8 @@ if (isset($_POST['logout'])) {
             <div class="monthYear" id="monthYear"></div>
             <button id="nextBtn"><i style="font-size: x-large;">&rarr;</i></button>
         </div>
+        <div id="error-message" style="color: red; text-align: center;"></div>
+        <div style="color: red; text-align:center;">Green are for avaliable dates to book. Red is for already booked dates. Gray is dates that are in past</div>
         <div class="days">
             <div class="day">mån</div>
             <div class="day">tis</div>
@@ -97,11 +108,15 @@ if (isset($_POST['logout'])) {
         <ul id="HJ" class="G" style="width: 100%;"></ul>
     </div>
 
+    
+
     <!-- Booking Form -->
     <form action="validera_bokning.php" method="POST" onsubmit="return BtnClick();">
     <input type="hidden" name="date" id="bookingdate">
     <input type="hidden" name="time1" id="bookingtime">
+    <div class="players-containers">
     <input type="number" name="players" id="amountplayers" placeholder="How many players? 1-8" required min="1" max="8" style="display:flex; margin:auto; width:340px;">
+    </div>
     <button id="btn" type="submit" class="btn btn-success">Boka</button>
 </form>
 </div>
