@@ -77,7 +77,8 @@ $currentDateTime = new DateTime();
             }
         }
         
-        .hamburg{
+        
+        .phonenav{
             display: none;
         }
         
@@ -86,7 +87,7 @@ $currentDateTime = new DateTime();
         .notmobile {
             display: none;
         }
-        .hamburg {
+        .phonenav {
             display: block;
         }
     }
@@ -245,6 +246,7 @@ $currentDateTime = new DateTime();
   <!-- hamburger phone navbar -->
         <div id="mySidenav" class="sidenav">
           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div class="phonenav nav nav-underline">
             <?php if (isset($_SESSION['username'])): ?>
     <li class="nav-item">
       <a href="user.php" class="nav-link active" style="color:black; font-size: 20px;">Mina sidor</a>
@@ -274,6 +276,7 @@ $currentDateTime = new DateTime();
         </form>
       </li> 
       <?php endif;?>
+            </div>
         </div>
     
     
