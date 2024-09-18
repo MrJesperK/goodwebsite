@@ -26,10 +26,16 @@ let label = document.getElementById('filter_label');
 
 
 
-function test(){
+function lowerRange(){
     let range_label = document.getElementById("range_lowest");
 let range_input = document.getElementById("lower");
     range_label.innerText = "Lägsta pris: " + range_input.value + "kr";
+}
+
+function higherRange(){
+  let range_label = document.getElementById("range_highest");
+let range_input = document.getElementById("higher");
+  range_label.innerText = "Högsta pris: " + range_input.value + "kr";
 }
 
 function searching(event) {

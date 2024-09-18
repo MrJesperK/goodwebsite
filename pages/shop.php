@@ -172,6 +172,32 @@ if (isset($_POST['deleteCart'])){
 
  header('refresh: 0');
 }
+
+$lowestPriceStmt = $pdo->prepare('SELECT price FROM products ORDER BY price ASC');
+$lowestPriceStmt->execute();
+$lowestPrice = $lowestPriceStmt->fetch(PDO::FETCH_ASSOC);
+
+$highestPriceStmt = $pdo->prepare('SELECT price FROM products ORDER BY price DESC');
+$highestPriceStmt->execute();
+$highestPrice = $highestPriceStmt->fetch(PDO::FETCH_ASSOC);
+
+if (isset($_POST['filterItems'])){
+$priceLowest = $_POST['priceLowest'];
+$priceHighest = $_POST['priceHighest'];
+
+$filterStmt = $pdo->prepare('SELECT * FROM products WHERE price >= :lowestPrice AND price <= :highestPrice');
+$filterStmt->bindParam(':lowestPrice', $priceLowest, PDO::PARAM_INT);
+$filterStmt->bindParam(':highestPrice', $priceHighest, PDO::PARAM_INT);
+$filterStmt->execute();
+
+$results = $filterStmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+if (isset($_POST['clearFilters'])){
+  $refetchProds=$pdo->prepare('SELECT * FROM products');
+  $refetchProds->execute();
+  $results = $refetchProds->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -338,12 +364,24 @@ if (isset($_POST['deleteCart'])){
     <hr>
 
     <div id="filters_hideable">
-    <form>
+    <form class="d-flex flex-column" method="post">
           <span class="multi-range w-25">
-            <span id="range_lowest">lägsta pris: 0kr</span>
-            <input type="range" min="0" max="50" value="0" id="lower" onchange="test()">
+            <span id="range_lowest">lägsta pris: <?php echo $lowestPrice['price'] ?>kr</span>
+            <input name="priceLowest" type="range" min="<?php echo $lowestPrice['price'] ?>" max="<?php echo $highestPrice['price'] ?>" value="<?php echo $lowestPrice['price'] ?>" id="lower" onchange="lowerRange()">
 
           </span>
+
+          <span class="multi-range w-25">
+            <span id="range_highest">högsta pris: <?php echo $highestPrice['price'] ?>kr</span>
+            <input name="priceHighest" type="range" min="<?php echo $lowestPrice['price'] ?>" max="<?php echo $highestPrice['price'] ?>" value="<?php echo $highestPrice['price'] ?>" id="higher" onchange="higherRange()">
+
+          </span>
+
+          <button type="submit" class="btn btn-primary w-25" name="filterItems">Filtrera</button>
+        </form>
+        <br>
+        <form method="post">
+          <button type="submit" class="btn btn-danger" name="clearFilters">Rensa filter</button>
         </form>
     </div>
 
@@ -450,23 +488,32 @@ if (isset($_POST['deleteCart'])){
               </button>
             
           <?php endif; ?>
-          <?php 
-              if (isset($_POST['EditProduct_' . $row['id']]) && $_SERVER['REQUEST_METHOD'] == "POST") {
-                $newPrice = $_POST['Editprice'];
-                $newName = $_POST['Editname'];
-                $newDesc = $_POST['Editdesc'];
-                $newStock = $_POST['Editstock'];
-                $product_id = $_POST['productID'];
-  
-                $updateProductStmt = $pdo->prepare('UPDATE products SET name = :newName, price = :newPrice, description = :newDesc, stock = :newStock WHERE id = :id');
-                $updateProductStmt->bindParam(':id', $product_id, PDO::PARAM_INT);
-                $updateProductStmt->bindParam(':newName', $newName, PDO::PARAM_STR);
-                $updateProductStmt->bindParam(':newPrice', $newPrice, PDO::PARAM_STR);
-                $updateProductStmt->bindParam(':newDesc', $newDesc, PDO::PARAM_STR);
-                $updateProductStmt->bindParam(':newStock', $newStock, PDO::PARAM_INT);
-                $updateProductStmt->execute();
-              }
-              ?>
+          <?php
+if (isset($_POST['EditProduct_' . $row['id']]) && $_SERVER['REQUEST_METHOD'] == "POST") {
+    $product_id = $_POST['productID'];
+
+    // Fetch the current values from the database
+    $fetchProductStmt = $pdo->prepare('SELECT * FROM products WHERE id = :id');
+    $fetchProductStmt->bindParam(':id', $product_id, PDO::PARAM_INT);
+    $fetchProductStmt->execute();
+    $existingProduct = $fetchProductStmt->fetch(PDO::FETCH_ASSOC);
+
+    // If input is empty, keep the current value from the database
+    $newName = !empty($_POST['Editname']) ? $_POST['Editname'] : $existingProduct['name'];
+    $newPrice = !empty($_POST['Editprice']) ? $_POST['Editprice'] : $existingProduct['price'];
+    $newDesc = !empty($_POST['Editdesc']) ? $_POST['Editdesc'] : $existingProduct['description'];
+    $newStock = !empty($_POST['Editstock']) ? $_POST['Editstock'] : $existingProduct['stock'];
+
+    // Prepare the update query
+    $updateProductStmt = $pdo->prepare('UPDATE products SET name = :newName, price = :newPrice, description = :newDesc, stock = :newStock WHERE id = :id');
+    $updateProductStmt->bindParam(':id', $product_id, PDO::PARAM_INT);
+    $updateProductStmt->bindParam(':newName', $newName, PDO::PARAM_STR);
+    $updateProductStmt->bindParam(':newPrice', $newPrice, PDO::PARAM_STR);
+    $updateProductStmt->bindParam(':newDesc', $newDesc, PDO::PARAM_STR);
+    $updateProductStmt->bindParam(':newStock', $newStock, PDO::PARAM_INT);
+    $updateProductStmt->execute();
+}
+?>
           <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1): ?>
            
           <button class="btn btn-info mb-2" data-bs-toggle="modal" data-bs-target="#editModal_<?php echo $row['id'] ?>">Edit</button>
@@ -489,7 +536,7 @@ if (isset($_POST['deleteCart'])){
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form method="post" name="editProduct" class="m-auto flex-column w-75 d-flex" enctype="multipart/form-data">
+      <form method="post" name="EditProduct_<?php echo $row['id'] ?>" class="m-auto flex-column w-75 d-flex">
         <h1 class="mb-3 w-75 m-auto text-center">Ändra produkt</h1>
         <div class="mb-3 w-75 m-auto">
           <input class="w-100 me-3" type="text" name="Editname" placeholder="namn">
@@ -521,7 +568,7 @@ if (isset($_POST['deleteCart'])){
   </div>
 </div>
 
-      <div class="modal fade ms-0" id="item_<?php echo $row['id']; ?>_modal" tabindex="-1"
+      <div class="modal fade" id="item_<?php echo $row['id']; ?>_modal" tabindex="-1"
         aria-labelledby="exampleModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
           <div class="modal-content">
@@ -590,7 +637,7 @@ if (isset($_POST['deleteCart'])){
 
                   <hr>
 
-                  <div id="reviews_<?php echo $row['id'] ?>" class="overflow-y-scroll" style="max-height:20rem;">
+                  <div id="reviews_<?php echo $row['id'] ?>" class="overflow-y-auto w-75 border border-black rounded m-auto reviewBox">
                     <?php if (!empty($reviews)): ?>
                       <?php foreach ($reviews as $review):
 
@@ -626,7 +673,7 @@ if (isset($_POST['deleteCart'])){
 
                       <?php endforeach; ?>
                     <?php else: ?>
-                      <div>No reviews available</div>
+                      <div class="p-3">No reviews available</div>
                     <?php endif; ?>
                   </div>
 
@@ -666,16 +713,7 @@ if (isset($_POST['deleteCart'])){
               </button>
             
           <?php endif; ?>
-            
-            <?php if ($row['stock'] <= 0): 
-              $setZeroStmt = $pdo->prepare('UPDATE products SET stock = 0 WHERE id = :prod_id');
-              $setZeroStmt->bindParam(':prod_id', $row['id'], PDO::PARAM_INT);
-              $setZeroStmt->execute();
-              ?>
-              <button class="btn btn-secondary w-100 mb-2">
-                Inte i lager
-              </button>
-            <?php endif; ?>
+          
               </div>
             </div>
           </div>
