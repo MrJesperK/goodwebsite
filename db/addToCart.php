@@ -41,7 +41,7 @@ if ($request && isset($request['id'])) {
                 // Initialize $cartItem to reflect the new amount
                 $cartItem = ['amount' => 1];
                 
-                echo "  <div class='bg-body-transparent'>
+                echo "  <div class='bg-body-transparent ms-2 mb-3 border border-black rounded p-2'>
             <h3>{$item['name']}</h3>
             <form method='post'>
             Mängd: 

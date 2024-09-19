@@ -130,13 +130,10 @@ if (isset($_POST['checkout'])) {
   foreach ($cartItems as $item) {
     $product_id = $item['product_id'];
     $quantity = $item['amount']; 
- 
-
     $fetchProdPrice = $pdo->prepare('SELECT price, stock FROM products WHERE id = :id');
-    $fetchProdPrice->bindParam(':id', $product_id, PDO::PARAM_INT);
+    $fetchProdPrice->bindParam(':id', var: $product_id);
     $fetchProdPrice->execute();
-    $priceAndStock = $fetchProdPrice->fetch(PDO::FETCH_ASSOC);
-
+    $priceAndStock = $fetchProdPrice->fetch(PDO::FETCH_ASSOC);  
     $price = $quantity * $priceAndStock['price']; 
 
  
@@ -160,8 +157,8 @@ if (isset($_POST['checkout'])) {
   $cartDeleteStmt = $pdo->prepare('DELETE FROM carts WHERE user_id = :user');
   $cartDeleteStmt->bindParam(':user', $user_id, PDO::PARAM_INT);
   $cartDeleteStmt->execute();
-
- header('refresh: 0');
+  header('Location: ' . $_SERVER['PHP_SELF']);
+  exit;
 }
 
 if (isset($_POST['deleteCart'])){
@@ -169,8 +166,8 @@ if (isset($_POST['deleteCart'])){
   $cartDeleteStmt = $pdo->prepare('DELETE FROM carts WHERE user_id = :user');
   $cartDeleteStmt->bindParam(':user', $user_id, PDO::PARAM_INT);
   $cartDeleteStmt->execute();
-
- header('refresh: 0');
+  header('Location: ' . $_SERVER['PHP_SELF']);
+  exit;
 }
 
 $lowestPriceStmt = $pdo->prepare('SELECT price FROM products ORDER BY price ASC');
@@ -217,103 +214,13 @@ if (isset($_POST['clearFilters'])){
   <link rel="stylesheet" href="../styles/sidomeny.css">
   <script src="../scripts/shop.js" defer></script>
   <script src="../scripts/sidomeny.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 
 <body class="d-flex flex-column min-vh-100 m-0 p-0">
 
-  <ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
-
-    <?php if (isset($_SESSION['username'])): ?>
-      <li class="nav-item">
-        <a href="user.php" class="nav-link" style="color:black; font-size: 20px;">Mina sidor</a>
-      </li>
-    <?php endif; ?>
-
-    <div id="main">
-      <span class="hamburg" onclick="openNav()">&#9776;</span>
-
-    </div>
-
-    <div id="mySidenav" class="sidenav">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-
-      <h2 class="text-white text-center border-bottom border-white position-relative">CART</h2>
-
-      <div id="cart" class="p-2">
-    <?php foreach ($cartItems as $cartItem):
-        $prodID = $cartItem['product_id'];
-        $prodFetch = $pdo->prepare('SELECT * FROM products WHERE id = :id');
-        $prodFetch->bindParam(':id', $prodID, PDO::PARAM_INT);
-        $prodFetch->execute();
-        $prod = $prodFetch->fetch(PDO::FETCH_ASSOC);
-        ?>
-        <div class="bg-body-transparent" id="<?php echo $cartItem['id'] ?>">
-            <h3><?php echo $prod['name'] ?></h3>
-            <form method="post">
-            Mängd: 
-    <input class="bg-transparent border-0" type="number" name="quantity" value="<?php echo $cartItem['amount']; ?>" min="1" max="<?php echo $prod['stock'] ?>">
-   
-    <input type="hidden" name="product_id" value="<?php echo $cartItem['product_id']; ?>">
-    <button class="btn" style="background-color:#A9B388 ;" type="submit" name="updateCart">Update Quantity</button>
-</form>
-
-            <p>Price: <?php echo $prod['price'] * $cartItem['amount']; ?> SEK</p>
-        </div>
-    <?php endforeach; ?>
-</div>
-
-<div id="cartTotal" class="cart-total text-white p-2">
-    <strong>Total: </strong> 
-    <span id="cartTotalPrice">
-        <?php 
-        $totalPrice = 0;
-        foreach ($cartItems as $cartItem) {
-            $prodID = $cartItem['product_id'];
-            $prodFetch = $pdo->prepare('SELECT price FROM products WHERE id = :id');
-            $prodFetch->bindParam(':id', $prodID, PDO::PARAM_INT);
-            $prodFetch->execute();
-            $prod = $prodFetch->fetch(PDO::FETCH_ASSOC);
-            $totalPrice += $prod['price'] * $cartItem['amount'];
-        }
-        echo $totalPrice . " SEK"; 
-        ?>
-    </span>
-</div>
-      <form method="post" class="m-auto" id="checkoutForm">
-        <input type="hidden" name="cart" id="cartInput" value="">
-        <button type="submit" name="checkout" class="btn w-75 m-auto" style="background-color:#A9B388 ;">Checkout</button>
-      </form>
-
-      <form method="post" class="m-auto" id="DeleteCart">
-        <button type="submit" name="deleteCart" class="btn w-75 m-auto btn-danger">rensa varukorg</button>
-      </form>
-    </div>
-    <li class="nav-item">
-      <a class="nav-link" style="color:black; font-size: 20px;" aria-current="page" href="index.php">Hem</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link active" style="color: black; font-size: 20px;" href="shop.php">Webbshop</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" style="color: black; font-size: 20px;" href="ban_sida.php">Karta</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" style="color:black; font-size: 20px;" href="bokning_sida.php">Bokning</a>
-    </li>
-    <?php if (!isset($_SESSION['username'])): ?>
-      <li class="nav-item">
-        <a class="nav-link" style="color:black; font-size: 20px;" href="login.php">Logga in</a>
-      </li>
-    <?php endif; ?>
-    <?php if (isset($_SESSION['username'])): ?>
-      <li class="nav-item">
-        <form method="post">
-          <button type="submit" name="logout" class="nav-link" style="color:black; font-size: 20px;">Logga ut</button>
-        </form>
-      </li>
-    <?php endif; ?>
-  </ul>
+  <?php require '../components/header.php' ?>
 
 
   <div class="p-5 shop_img w-100 position-absolute"></div>

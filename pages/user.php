@@ -27,7 +27,82 @@ $totalProducts = 0;
 
 $currentDateTime = new DateTime();
 
-
+// copy the php code below to all pages aswell
+if (isset($_SESSION['userID'])) {
+    $cartStmt = $pdo->prepare('SELECT * FROM carts WHERE user_id = :user_id');
+    $cartStmt->bindParam(':user_id', $_SESSION['userID'], PDO::PARAM_INT);
+    $cartStmt->execute();
+  
+    $cartItems = $cartStmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+  
+  if (isset($_POST['updateCart'])) {
+    $product_id = $_POST['product_id'];
+    $quantity = $_POST['quantity'];
+    $user_id = $_SESSION['userID'];
+  
+    $updateCartStmt = $pdo->prepare("UPDATE carts SET amount = :quantity WHERE user_id = :user_id AND product_id = :product_id");
+    $updateCartStmt->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+    $updateCartStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $updateCartStmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+    $updateCartStmt->execute();
+  }
+  
+  if (isset($_POST['checkout'])) {
+    $user_id = $_SESSION['userID'];
+  
+    $checkOrderIdStmt = $pdo->prepare('SELECT order_id FROM orders ORDER BY id DESC LIMIT 1');
+    $checkOrderIdStmt->execute();
+  
+    $orderExists = $checkOrderIdStmt->fetch(PDO::FETCH_ASSOC);
+  
+    if ($orderExists){
+      $order_id = $orderExists['order_id'] + 1;
+    }
+  
+    foreach ($cartItems as $item) {
+      $product_id = $item['product_id'];
+      $quantity = $item['amount']; 
+      $fetchProdPrice = $pdo->prepare('SELECT price, stock FROM products WHERE id = :id');
+      $fetchProdPrice->bindParam(':id', var: $product_id);
+      $fetchProdPrice->execute();
+      $priceAndStock = $fetchProdPrice->fetch(PDO::FETCH_ASSOC);  
+      $price = $quantity * $priceAndStock['price']; 
+  
+   
+  
+    $insertOrderStmt = $pdo->prepare('INSERT INTO orders (created_at, user_id, total_price, item_amount, item_id, order_id) VALUES (now(), :user, :price, :amount, :item, :order_id)');
+    $insertOrderStmt->bindParam(':item', $product_id, PDO::PARAM_INT);  
+    $insertOrderStmt->bindParam(':amount', $quantity, PDO::PARAM_INT);
+    $insertOrderStmt->bindParam(':user', $user_id, PDO::PARAM_INT);
+    $insertOrderStmt->bindParam(':price', $price, PDO::PARAM_INT);
+    $insertOrderStmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
+    $insertOrderStmt->execute();
+  
+    $newStock = $priceAndStock['stock'] - $quantity;
+  
+    $updateProductsStmt = $pdo->prepare('UPDATE products SET stock = :newStock WHERE id = :product_id');
+    $updateProductsStmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+    $updateProductsStmt->bindParam(':newStock', $newStock, PDO::PARAM_INT);
+    $updateProductsStmt->execute();
+    }
+  
+    $cartDeleteStmt = $pdo->prepare('DELETE FROM carts WHERE user_id = :user');
+    $cartDeleteStmt->bindParam(':user', $user_id, PDO::PARAM_INT);
+    $cartDeleteStmt->execute();
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit;
+  }
+  
+  if (isset($_POST['deleteCart'])){
+    $user_id = $_SESSION['userID'];
+    $cartDeleteStmt = $pdo->prepare('DELETE FROM carts WHERE user_id = :user');
+    $cartDeleteStmt->bindParam(':user', $user_id, PDO::PARAM_INT);
+    $cartDeleteStmt->execute();
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit;
+  }
+//   no more than this
 ?>
 
 
@@ -38,13 +113,22 @@ $currentDateTime = new DateTime();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $_SESSION['username'];?></title>
-    <link rel="stylesheet" href="../styles/color.css">
-    <link rel="stylesheet" href="../styles/footer.css">
-    <link rel="stylesheet" href="../styles/index.css">
-    <link rel="stylesheet" href="../styles/sidomeny.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="../scripts/sidomeny.js" defer></script>
+
+    <!-- copy these to all files -->
+    <link rel="stylesheet" href="Cart.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../styles/shop.css">
+  <link rel="stylesheet" href="../styles/footer.css">
+  <link rel="stylesheet" href="../styles/sidomeny.css">
+  <script src="../scripts/shop.js" defer></script>
+  <script src="../scripts/sidomeny.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- end of files to copy -->
+
     <style>
         
         @media (max-width: 1100px) {
@@ -236,83 +320,7 @@ $currentDateTime = new DateTime();
 </head>
 <body class="d-flex flex-column min-vh-100 font-tests">
     
-<ul class="nav nav-underline bg-body-tertiary border-bottom justify-content-center">
-
-    
-
-        <div id="main">
-          <span class="hamburg" onclick="openNav()">&#9776;</span>
-        </div>
-  <!-- hamburger phone navbar -->
-        <div id="mySidenav" class="sidenav">
-          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <div class="phonenav nav nav-underline">
-            <?php if (isset($_SESSION['username'])): ?>
-    <li class="nav-item">
-      <a href="user.php" class="nav-link active" style="color:black; font-size: 20px;">Mina sidor</a>
-    </li>
-    <?php endif; ?>
-          <li class="nav-item">
-        <a class="nav-link" style="color:black; font-size: 20px;" aria-current="page" href="index.php">Hem</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" style="color: black; font-size: 20px;" href="shop.php">Webbshop</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" style="color: black; font-size: 20px;" href="ban_sida.php">Karta</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" style="color:black; font-size: 20px;"  href="bokning_sida.php">Bokning</a>
-      </li>     
-      <?php if (!isset($_SESSION['username'])):?>
-      <li class="nav-item">
-        <a class="nav-link" style="color:black; font-size: 20px;"  href="login.php">Logga in</a>
-      </li> 
-      <?php endif;?>
-      <?php if (isset($_SESSION['username'])):?>
-      <li class="nav-item">
-        <form method="post">
-        <button type="submit" name="logout" class="nav-link" style="color:black; font-size: 20px;">Logga ut</button>
-        </form>
-      </li> 
-      <?php endif;?>
-            </div>
-        </div>
-    
-    
-    <!-- not on phone navbar -->
-    <div class="notmobile nav nav-underline" style="">
-        <?php if (isset($_SESSION['username'])): ?>
-    <li class="nav-item">
-      <a href="user.php" class="nav-link active" style="color:black; font-size: 20px;">Mina sidor</a>
-    </li>
-    <?php endif; ?>
-      <li class="nav-item">
-        <a class="nav-link" style="color:black; font-size: 20px;" aria-current="page" href="index.php">Hem</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" style="color: black; font-size: 20px;" href="shop.php">Webbshop</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" style="color: black; font-size: 20px;" href="ban_sida.php">Karta</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" style="color:black; font-size: 20px;"  href="bokning_sida.php">Bokning</a>
-      </li>     
-      <?php if (!isset($_SESSION['username'])):?>
-      <li class="nav-item">
-        <a class="nav-link" style="color:black; font-size: 20px;"  href="login.php">Logga in</a>
-      </li> 
-      <?php endif;?>
-      <?php if (isset($_SESSION['username'])):?>
-      <li class="nav-item">
-        <form method="post">
-        <button type="submit" name="logout" class="nav-link" style="color:black; font-size: 20px;">Logga ut</button>
-        </form>
-      </li> 
-      <?php endif;?>
-    </div>
-</ul>
+<?php require '../components/header.php' ?>
     
 <main class="">
     <h1 class="text-center mt-3"> Välkommen <?php echo $_SESSION['username']?>!</h1>

@@ -84,3 +84,15 @@ body{
         width: 100% !important;      /* Ensure content fills the dialog */
     }
     
+    .phonenav, .phonenavbox{
+        display: none;
+    }
+
+    .nav{
+        justify-content: center;
+    }
+    
+    
+
+ 
+
