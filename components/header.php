@@ -9,6 +9,8 @@ require '../db/dbconn.php';
         margin-top: 0.5rem !important;
     }
 
+    
+
     @media screen and (max-width: 768px) {
     .notmobile {
         display: none;

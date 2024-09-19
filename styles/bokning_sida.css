@@ -37,6 +37,7 @@ body {
     justify-content: center;
     grid-template-columns: repeat(auto-fill, minmax(70px, 70px));
     
+    
 }
 
 .CAL{
