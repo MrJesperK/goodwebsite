@@ -168,7 +168,7 @@ if (isset($_SESSION['userID'])) {
   <script src="../scripts/sidomeny.js" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body >
+<body  class="d-flex flex-column min-vh-100 m-0 p-0" >
 
 <?php require '../components/header.php'?>
 
@@ -194,7 +194,8 @@ top: 120px; ">
     
     padding: 5px;
    
-    position:relative; ">På den här sidan kan du antigen Ångra din bokning eller Verifiera din bokning och då kommer den tiden att låsas som upptagen. Curabitur gravida vulputate orci, id mollis enim suscipit a. Etiam sodales lacus vitae lorem tincidunt rutrum. Ut pretium turpis eu quam laoreet mollis. Integer ornare condimentum mauris ac vestibulum. Donec aliquam laoreet lorem. Etiam non eros neque. Nam scelerisque sapien at sapien tincidunt fringilla. Sed consectetur consequat ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in metus semper, ullamcorper leo in, tincidunt elit.</p>
+    position:relative; ">Vänligen bekräfta dina bokningsdetaljer nedan.
+Genom att fortsätta godkänner du att det valda datumet och tiden är korrekta. Se till att alla detaljer är korrekta innan du skickar in din bokning. När bokningen väl är inskickad kan ändringar kanske inte göras. Om allt ser bra ut, klicka på 'Verifiera Bokning' för att slutföra din bokning.</p>
     
 <div>
 <button onclick="window.location.href='bokning_sida.php'" class="btn btn-danger"
@@ -228,13 +229,13 @@ justify-content:center;
   
   >
   
-  Date: <?php echo $dateWork; ?>
+  Datum: <?php echo $dateWork; ?>
   <br>
-  Time: <?php echo $timeWork;?> CET
+  Tid: <?php echo $timeWork;?> CET
   <br>
-  Amount: <?php echo $players; ?> Players
+  Spelare: <?php echo $players; ?> Players
   <br>
-  User: <?php echo $_SESSION['username']; ?>
+  Användare: <?php echo $_SESSION['username']; ?>
   <br> Email: <?php echo $email; ?>
   </div>
 
@@ -259,6 +260,7 @@ justify-content: center;
 </div>
 </div>
 <br> 
+<br>
 <footer class="footer mt-auto">
     <div class="containerfooter">
         <div class="footer-section">
