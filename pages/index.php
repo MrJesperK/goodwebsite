@@ -169,7 +169,7 @@ if (isset($_POST['deleteCart'])){
    </div>
     <!--w-25-->
    <div class="m-auto mb-5 p-3 font-intro text-box">
-    <h2 class="text-center">Välkommen!</h2>
+    <h2 class="text-center" style="color:whitesmoke;">Välkommen!</h2>
     <hr>
     <p class="fs-5" style="color:Whitesmoke;">
         Välkommen till kastmyrens diskare! Din plats för att njuta och ha kul med familjen.

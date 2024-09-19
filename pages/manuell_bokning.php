@@ -179,7 +179,7 @@ if (isset($_SESSION['userID'])) {
                 <input type="number" id="players" name="players" class="form-control" required min="1" max="8" placeholder="1-8">
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width:100%;">Submit Booking</button>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Boka</button>
         </form>
     </div>
 
