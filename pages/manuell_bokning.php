@@ -163,20 +163,20 @@ if (isset($_SESSION['userID'])) {
         <form id="manualBookingForm" action="process_bokning.php" method="post">
 
             <div class="mb-3">
-                <label for="datum" class="form-label">Select Date:</label>
+                <label for="datum" class="form-label">Välj Datum:</label>
                 <input type="date" id="datum" name="datum" class="form-control" required>
             </div>
 
             <div class="mb-3">
-                <label for="time" class="form-label">Select Time:</label>
+                <label for="time" class="form-label">Välj Tid:</label>
                 <select id="time" name="time" class="form-select" required>
                     <!-- Options will be populated by JavaScript -->
                 </select>
             </div>
 
             <div class="mb-3">
-                <label for="players" class="form-label">Number of Players:</label>
-                <input type="number" id="players" name="players" class="form-control" required min="1" max="8" placeholder="Hur många spelare?">
+                <label for="players" class="form-label">Antal Spelare:</label>
+                <input type="number" id="players" name="players" class="form-control" required min="1" max="8" placeholder="1-8">
             </div>
 
             <button type="submit" class="btn btn-primary" style="width:100%;">Submit Booking</button>
@@ -275,8 +275,8 @@ if (isset($_SESSION['userID'])) {
 <footer class="footer mt-auto">
     <div class="containerfooter">
         <div class="footer-section">
-            <h4>Contact Us</h4>
-            <p>Email: Kastmyrens@diskare.com</p>
+            <h4>Kontakta Oss</h4>
+            <p><a href="mailto:Kastmyrens@diskare.com">Email: Kastmyrens@diskare.com</a></p>
             <p>Telefon: +123-456-7890</p>
         </div>
     </div>

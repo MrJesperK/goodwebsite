@@ -93,6 +93,31 @@ body{
     }
     
     
+@media (max-width: 768px) {
+    .m{
+    width: 100% !important;
+    
+    }
+    
+    .t{
+        width: 75% !important;
+    }
+    
+    .r{
+         width: 50% !important;
+    }
+    
+    .g{
+     justify-content: center !important;   
+        align-items: center  !important;
+    }
+    
+    .te{
+        text-align: center;
+    }
+     
+    
 
+}
  
 

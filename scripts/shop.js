@@ -40,7 +40,6 @@ let range_input = document.getElementById("higher");
 
 function searching(event) {
     event.preventDefault();
-    console.log("NOT PENIS");
     var data = new FormData(document.getElementById("searchForm"));
     console.log("Form data:", data);
   

@@ -171,8 +171,8 @@ if (isset($_POST['deleteCart'])){
 <footer class="footer mt-auto">
     <div class="containerfooter">
         <div class="footer-section">
-            <h4>Contact Us</h4>
-            <p>Email: Kastmyrens@diskare.com</p>
+        <h4>Kontakta Oss</h4>
+            <p><a href="mailto:Kastmyrens@diskare.com">Email: Kastmyrens@diskare.com</a></p>
             <p>Telefon: +123-456-7890</p>
         </div>
     </div>

@@ -167,6 +167,14 @@ if (isset($_SESSION['userID'])) {
   <script src="../scripts/shop.js" defer></script>
   <script src="../scripts/sidomeny.js" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+      @media (max-width: 500px) {
+      .d{
+          width: 100% !important;
+      } 
+      }
+    
+  </style>
 </head>
 <body  class="d-flex flex-column min-vh-100 m-0 p-0" >
 
@@ -194,7 +202,7 @@ top: 120px; ">
     
     padding: 5px;
    
-    position:relative; ">Vänligen bekräfta dina bokningsdetaljer nedan.
+    position:relative; " class="d">Vänligen bekräfta dina bokningsdetaljer nedan.
 Genom att fortsätta godkänner du att det valda datumet och tiden är korrekta. Se till att alla detaljer är korrekta innan du skickar in din bokning. När bokningen väl är inskickad kan ändringar kanske inte göras. Om allt ser bra ut, klicka på 'Verifiera Bokning' för att slutföra din bokning.</p>
     
 <div>

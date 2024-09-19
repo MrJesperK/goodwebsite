@@ -224,25 +224,25 @@ if (isset($_POST['clearFilters'])){
 
 
   <div class="p-5 shop_img w-100 position-absolute"></div>
-  <div class="w-75 p-3 border border-black rounded m-auto mb-5 bg-white filter_box">
+  <div class="w-75 p-3 border border-black rounded m-auto mb-5 bg-white filter_box m">
     <?php
     if (isset($_SESSION['admin']) && $_SESSION['admin'] == true): ?>
 
       <form method="post" class="m-auto flex-column w-75 d-flex" enctype="multipart/form-data">
         <h1 class="mb-3 w-75 m-auto text-center">Lägg till produkt</h1>
-        <div class="mb-3 w-75 m-auto">
+        <div class="mb-3 w-75 m-auto m">
           <input class="w-100 me-3" type="text" id="" name="name" placeholder="namn">
         </div>
 
-        <div class="mb-3 w-75 m-auto">
+        <div class="mb-3 w-75 m-auto m">
           <input class="w-100" type="number" id="price" step="0.01" name="price" placeholder="Pris">
         </div>
 
-        <div class="mb-3 w-75 m-auto">
+        <div class="mb-3 w-75 m-auto m">
           <input class="w-100" type="text" id="description" name="desc" placeholder="Beskrivning">
         </div>
 
-        <div class="mb-3 w-75 m-auto">
+        <div class="mb-3 w-75 m-auto m">
           <input class="w-100" type="number" id="stock" name="stock" placeholder="stock">
         </div>
 
@@ -251,16 +251,16 @@ if (isset($_POST['clearFilters'])){
         </div>
 
         <input type="submit" name="createProduct" value="Lägg till produkt"
-          class="mb-3 w-50 m-auto text-center btn btn-primary">
+          class="mb-3 w-50 m-auto text-center btn btn-primary t">
       </form>
     <?php endif; ?>
 
     <h4 class="text-center text-decoration-underline m-auto">filtrera</h4>
 
-    <div class="row flex-column gap-3" id="filters_always_shown">
-      <form method="post" id="searchForm" role="search" onsubmit="return searching(event)">
-        <input type="text" name="search" id="search" class="w-25" placeholder="Sök">
-        <button type="submit" name="search" class="btn btn-success">Sök</button>
+    <div class="row flex-column gap-3 m g " id="filters_always_shown">
+      <form method="post" id="searchForm" role="search" onsubmit="return searching(event)" class="m g te ">
+        <input type="text" name="search" id="search" class="w-25 t" placeholder="Sök">
+        <button type="submit" name="search" class="btn btn-success r mt-3">Sök</button>
       </form>
 
       <div>
@@ -270,32 +270,32 @@ if (isset($_POST['clearFilters'])){
 
     <hr>
 
-    <div id="filters_hideable">
-    <form class="d-flex flex-column" method="post">
-          <span class="multi-range w-25">
+    <div id="filters_hideable" class="m g te">
+    <form class="d-flex flex-column  m g te" method="post">
+          <span class="multi-range w-25 t g">
             <span id="range_lowest">lägsta pris: <?php echo $lowestPrice['price'] ?>kr</span>
             <input name="priceLowest" type="range" min="<?php echo $lowestPrice['price'] ?>" max="<?php echo $highestPrice['price'] ?>" value="<?php echo $lowestPrice['price'] ?>" id="lower" onchange="lowerRange()">
 
           </span>
 
-          <span class="multi-range w-25">
+          <span class="multi-range w-25 t g">
             <span id="range_highest">högsta pris: <?php echo $highestPrice['price'] ?>kr</span>
             <input name="priceHighest" type="range" min="<?php echo $lowestPrice['price'] ?>" max="<?php echo $highestPrice['price'] ?>" value="<?php echo $highestPrice['price'] ?>" id="higher" onchange="higherRange()">
 
           </span>
 
-          <button type="submit" class="btn btn-primary w-25" name="filterItems">Filtrera</button>
+          <button type="submit" class="btn btn-primary w-25 r" name="filterItems">Filtrera</button>
         </form>
         <br>
         <form method="post">
-          <button type="submit" class="btn btn-danger" name="clearFilters">Rensa filter</button>
+          <button type="submit" class="btn btn-danger r" name="clearFilters">Rensa filter</button>
         </form>
     </div>
 
-    <div class="w-25 m-auto row justify-content-center">
+    <div class="w-25 m-auto justify-content-center m mt-4"> 
       <div class="col text-center">
-        <input type="checkbox" checked class="col" id="filter_button" onclick="filtersHideShow()"></input>
-        <label for="filter_button" id="filter_label" class="col btn btn-secondary w-100">Göm filter &uarr;</label>
+        <input  type="checkbox" checked class="col" id="filter_button" onclick="filtersHideShow()"></input>
+        <label for="filter_button" id="filter_label" class="col btn btn-secondary w-100 r">Göm filter &uarr;</label>
       </div>
     </div>
   </div>
