@@ -126,7 +126,7 @@ if (isset($_POST['deleteCart'])){
 
 <?php require '../components/header.php' ?>
 
-
+<br>
 
 <!-- Calendar Section -->
 <div class="CAL">

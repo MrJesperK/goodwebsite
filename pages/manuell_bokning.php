@@ -155,18 +155,7 @@ if (isset($_SESSION['userID'])) {
 <body class="font-tests d-flex flex-column min-vh-100">
     <?php require '../components/header.php' ?>
 
-<!-- Hamburger Menu -->
-<div id="main" style="margin-bottom: 100px;">
-    <span class="hamburg" onclick="openNav()">&#9776;</span>
-</div>
 
-<!-- Side Navigation -->
-<div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="bokning_sida.php">Bokning</a>
-    <a href="user.php">Mina sidor</a>
-    <a href="ban_sida.php">Karta</a>
-</div>
 
 <div id="message" class="mt-3"></div>
     <div class="form-container">

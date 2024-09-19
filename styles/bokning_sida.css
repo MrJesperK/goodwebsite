@@ -1,13 +1,5 @@
 
-body {
-    font-family: "Lato", sans-serif;
-    display: flex;
-    flex-direction: column;
-    max-height: 1000px;
-    
-    
-    
-}
+
 .calendar{
     width: 380px;
     height: auto;

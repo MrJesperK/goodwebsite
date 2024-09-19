@@ -64,6 +64,11 @@ require '../db/dbconn.php';
       <li class="nav-item">
         <a class="btn nav-link" style="color:black; font-size: 20px;"  href="bokning_sida.php">Bokning</a>
       </li>     
+        <?php if(isset($_SESSION['admin'])): ?>
+      <li class="nav-item">
+        <a class="btn nav-link" style="color:black; font-size: 20px;"  href="manuell_bokning.php">Manuell bokning</a>
+      </li> 
+      <?php endif;?>
       <?php if (!isset($_SESSION['username'])):?>
       <li class="nav-item">
         <a class="btn nav-link" style="color:black; font-size: 20px;"  href="login.php">Logga in</a>
@@ -163,6 +168,11 @@ require '../db/dbconn.php';
     <li class="nav-item">
       <a class="nav-link" style="color:black; font-size: 20px;" href="bokning_sida.php">Bokning</a>
     </li>
+    <?php if(isset($_SESSION['admin'])): ?>
+      <li class="nav-item">
+        <a class="nav-link" style="color:black; font-size: 20px;"  href="manuell_bokning.php">Manuell bokning</a>
+      </li> 
+      <?php endif;?>
     <?php if (!isset($_SESSION['username'])): ?>
       <li class="nav-item">
         <a class="nav-link" style="color:black; font-size: 20px;" href="login.php">Logga in</a>
